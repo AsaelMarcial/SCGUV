@@ -60,6 +60,7 @@ public class InicioCoordinadorController implements Initializable {
         try{
         Stage stage = (Stage) btnVerAvancesProgramaticos.getScene().getWindow();
         Scene scene = new Scene(FXMLLoader.load(getClass().getResource(nombreFXML)));
+        stage.setResizable(false);
         stage.setScene(scene);
         
         }catch(IOException ex){

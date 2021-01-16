@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Point3D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -12,7 +13,7 @@
    <children>
       <ImageView fitHeight="369.0" fitWidth="328.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../imagenes/LoginFondo.png" />
+            <Image url="@LoginFondo.png" />
          </image>
       </ImageView>
       <Label layoutX="408.0" layoutY="39.0" prefHeight="25.0" prefWidth="122.0" text="Sistema de Gestión" textOverrun="CLIP">
@@ -37,4 +38,7 @@
       </Label>
       <Label layoutX="376.0" layoutY="127.0" text="Nombre de usuario" />
    </children>
+   <rotationAxis>
+      <Point3D />
+   </rotationAxis>
 </AnchorPane>
