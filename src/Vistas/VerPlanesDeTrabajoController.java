@@ -117,7 +117,6 @@ public class VerPlanesDeTrabajoController implements Initializable {
         plan = listvPlanesDeTrabajo.getSelectionModel().getSelectedItem();
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("VisualizarPlanDeTrabajo.fxml"));
-             
             Parent root = loader.load();
             
             VisualizarPlanDeTrabajoController controlador = loader.getController();

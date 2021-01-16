@@ -48,6 +48,7 @@ public class Periodo {
         this.fechaFin = fechaFin;
     }
 
+    
     @Override
     public String toString() {
         return nombre;

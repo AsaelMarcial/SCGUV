@@ -1,15 +1,22 @@
 package Vistas;
 
+import BaseDeDatos.ConexionBD;
 import Pojos.Academia;
 import Pojos.Academico;
 import Pojos.ExperienciaEducativa;
 import Pojos.Periodo;
+import Util.Herramientas;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -51,20 +58,20 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     @FXML
     private TableView<?> tablevActividades;
     @FXML
-    private TableColumn<?, ?> tbcActividadesActividad;
+    private TableColumn tbcActividadesActividad;
     @FXML
-    private TableColumn<?, ?> tbcActividadesFecha;
+    private TableColumn tbcActividadesFecha;
     @FXML
-    private TableColumn<?, ?> tbcActividadesOperacion;
+    private TableColumn tbcActividadesOperacion;
     
     @FXML
     private TableView<?> tablevTemas;
     @FXML
-    private TableColumn<?, ?> tbcTemasExperienciaEducativa;
+    private TableColumn tbcTemasExperienciaEducativa;
     @FXML
-    private TableColumn<?, ?> tbcTemasParcial;
+    private TableColumn tbcTemasParcial;
     @FXML
-    private TableColumn<?, ?> tbcTemasTema;
+    private TableColumn tbcTemasTema;
     
     @FXML
     private ComboBox<Periodo> cmbPeriodo;
@@ -73,7 +80,7 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     @FXML
     private ComboBox<Academico> cmbCoordinador;
     @FXML
-    private ComboBox<?> cmbExperienciaEducativa;
+    private ComboBox<ExperienciaEducativa> cmbExperienciaEducativa;
     
     ObservableList<Periodo> periodos;
     ObservableList<Academico> coordinadores;
@@ -85,8 +92,32 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
     }    
+    
+    private void cargarComboBoxPeriodo(){
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        Alert alertConexion;
+        if(conn != null){
+            try{
+             String consulta = "SELECT * FROM planAcademia";
+             PreparedStatement ps = conn.prepareStatement(consulta);
+             ResultSet rs = ps.executeQuery();
+             while(rs.next()){
+                 Periodo p = new Periodo();
+                 p.setIdPeriodo(0);
+                         
+             }
+         
+            }catch(SQLException ex){
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta", Alert.AlertType.ERROR);
+                alertConexion.showAndWait();   
+            }
+        }else{
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+    }
 
     @FXML
     private void clicAgregarActividad(ActionEvent event) {
