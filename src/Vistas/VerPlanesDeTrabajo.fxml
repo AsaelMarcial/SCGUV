@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="418.0" prefWidth="449.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vistas.VerPlanesDeTrabajoController">
+   <children>
+      <ListView fx:id="listvPlanesDeTrabajo" layoutX="30.0" layoutY="73.0" onMouseClicked="#clicElementoLista" prefHeight="315.0" prefWidth="235.0" style="-fx-background-color: #E9EBEE;" />
+      <Button fx:id="btnVisualizarPlan" disable="true" layoutX="300.0" layoutY="184.0" mnemonicParsing="false" onAction="#clicVisualizarPlan" prefHeight="25.0" prefWidth="114.0" style="-fx-background-color: #3369CD;" text="Visualizar plan" textFill="WHITE" />
+      <Button fx:id="btnActualizarPlan" disable="true" layoutX="300.0" layoutY="218.0" mnemonicParsing="false" onAction="#clicActualizarPlan" prefHeight="25.0" prefWidth="114.0" style="-fx-background-color: #F4C532;" text="Actualizar plan" textFill="WHITE" />
+      <Label layoutX="30.0" layoutY="56.0" text="Programas de estudio" />
+      <Button fx:id="btnEliminarPlan" disable="true" layoutX="300.0" layoutY="254.0" mnemonicParsing="false" onAction="#clicEliminarPlan" prefHeight="25.0" prefWidth="114.0" style="-fx-background-color: #F04C2E;" text="Eliminar plan" textFill="WHITE" />
+      <Button fx:id="btnRegistrarPlan" layoutX="300.0" layoutY="107.0" mnemonicParsing="false" onAction="#clicRegistrarPlan" prefHeight="25.0" prefWidth="114.0" style="-fx-background-color: #27B232;" text="Registrar plan" textFill="WHITE" />
+      <Button fx:id="btnSalir" layoutX="367.0" layoutY="363.0" mnemonicParsing="false" onAction="#clicSalir" text="Salir" />
+      <Label layoutX="163.0" layoutY="14.0" text="Planes de trabajo">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

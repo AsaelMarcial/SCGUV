@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="410.0" prefWidth="395.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vistas.InicioCoordinadorController">
+   <children>
+      <Button fx:id="btnVerAvancesProgramaticos" defaultButton="true" disable="true" layoutX="78.0" layoutY="108.0" mnemonicParsing="false" onAction="#clicVerAvancesProgramáticos" prefHeight="46.0" prefWidth="240.0" style="-fx-background-color: #3369CD;" text="Ver avances programáticos" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnVerPlanesDeTrabajo" layoutX="78.0" layoutY="177.0" mnemonicParsing="false" onAction="#clicVerPlanesDeTrabajo" prefHeight="46.0" prefWidth="240.0" style="-fx-background-color: #3369CD;" text="Ver planes de trabajo" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Label layoutX="91.0" layoutY="20.0" text="Sistema de Gestión de Calidad">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnVerMinutas" disable="true" layoutX="78.0" layoutY="248.0" mnemonicParsing="false" onAction="#clicVerMinutasDeReunionAcademica" prefHeight="46.0" prefWidth="240.0" style="-fx-background-color: #3369CD;" text="Ver minutas de reunión académica" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Label layoutX="164.0" layoutY="58.0" text="Coordinador" />
+      <Button fx:id="btnVerProgramasDeEstudios" layoutX="79.0" layoutY="318.0" mnemonicParsing="false" onAction="#clicVerProgramasDeEstudios" prefHeight="46.0" prefWidth="240.0" style="-fx-background-color: #3369CD;" text="Ver programas de estudios" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

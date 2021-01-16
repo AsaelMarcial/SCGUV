@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="641.0" prefWidth="710.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vistas.ActualizarPlanDeTrabajoController">
+   <children>
+      <Label layoutX="41.0" layoutY="11.0" text="Nombre del plan:" />
+      <TextField fx:id="txfNombrePlan" layoutX="38.0" layoutY="28.0" prefHeight="25.0" prefWidth="175.0" style="-fx-background-color: #E9EBEE;" />
+      <Label layoutX="40.0" layoutY="60.0" text="Periodo:" />
+      <Label layoutX="258.0" layoutY="60.0" text="Coordinador:" />
+      <Button fx:id="btnCancelar" layoutX="617.0" layoutY="596.0" mnemonicParsing="false" text="Cancelar" />
+      <TableView fx:id="tablevActividades" layoutX="37.0" layoutY="201.0" prefHeight="141.0" prefWidth="548.0">
+         <columns>
+            <TableColumn fx:id="tbcActividadesActividad" prefWidth="147.0" text="Actividad" />
+            <TableColumn fx:id="tbcActividadesFecha" prefWidth="93.0" text="Fecha" />
+            <TableColumn fx:id="tbcActividadesOperacion" prefWidth="307.0" text="Operación" />
+         </columns>
+      </TableView>
+      <Label layoutX="471.0" layoutY="11.0" text="Objetivo general:" />
+      <TextArea fx:id="txaObjetivoGeneral" layoutX="471.0" layoutY="30.0" prefHeight="74.0" prefWidth="201.0" />
+      <TableView fx:id="tablevTemas" layoutX="35.0" layoutY="434.0" prefHeight="141.0" prefWidth="548.0">
+         <columns>
+            <TableColumn fx:id="tbcTemasExperienciaEducativa" prefWidth="159.0" text="EE" />
+            <TableColumn fx:id="tbcTemasParcial" prefWidth="43.0" text="Parcial" />
+            <TableColumn fx:id="tbcTemasTema" prefWidth="246.0" text="Tema" />
+         </columns>
+      </TableView>
+      <Label layoutX="32.0" layoutY="417.0" text="Temas de exámenes:" />
+      <Label layoutX="37.0" layoutY="131.0" text="Actividad" />
+      <Label layoutX="223.0" layoutY="131.0" text="Fecha" />
+      <Label layoutX="411.0" layoutY="131.0" text="Operacion" />
+      <TextField fx:id="txfActividad" layoutX="35.0" layoutY="147.0" prefHeight="25.0" prefWidth="175.0" style="-fx-background-color: #E9EBEE;" />
+      <DatePicker fx:id="datepFecha" layoutX="224.0" layoutY="147.0" />
+      <TextField fx:id="txfOperacion" layoutX="411.0" layoutY="147.0" prefHeight="25.0" prefWidth="201.0" style="-fx-background-color: #E9EBEE;" />
+      <Button fx:id="btnAgregarActividad" layoutX="601.0" layoutY="201.0" mnemonicParsing="false" onAction="#clicAgregarActividad" prefHeight="25.0" prefWidth="59.0" style="-fx-background-color: #5ADE65;" text="Agregar" />
+      <Button fx:id="btnEliminarActividad" layoutX="601.0" layoutY="235.0" mnemonicParsing="false" onAction="#clicEliminarActividad" style="-fx-background-color: #F16D55;" text="Eliminar" />
+      <Separator layoutX="13.0" layoutY="114.0" prefHeight="17.0" prefWidth="639.0" />
+      <Label layoutX="37.0" layoutY="363.0" text="EE:" />
+      <ComboBox fx:id="cmbExperienciaEducativa" layoutX="35.0" layoutY="380.0" prefHeight="25.0" prefWidth="175.0" />
+      <Label layoutX="220.0" layoutY="363.0" text="Parcial:" />
+      <TextField fx:id="txfParcial" layoutX="223.0" layoutY="380.0" prefHeight="25.0" prefWidth="175.0" style="-fx-background-color: #E9EBEE;" />
+      <Label layoutX="411.0" layoutY="363.0" text="Tema:" />
+      <TextField fx:id="txfTema" layoutX="411.0" layoutY="380.0" prefHeight="25.0" prefWidth="201.0" style="-fx-background-color: #E9EBEE;" />
+      <Button fx:id="btnActualizar" layoutX="310.0" layoutY="591.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="91.0" style="-fx-background-color: #27B232;" text="Actualizar" textFill="WHITE" />
+      <Button fx:id="btnAgregarTema" layoutX="601.0" layoutY="434.0" mnemonicParsing="false" onAction="#clicAgregarTema" prefHeight="25.0" prefWidth="59.0" style="-fx-background-color: #5ADE65;" text="Agregar" />
+      <Button fx:id="btnEliminarTema" layoutX="601.0" layoutY="467.0" mnemonicParsing="false" onAction="#clicEliminarTema" style="-fx-background-color: #F16D55;" text="Eliminar" />
+      <Label layoutX="37.0" layoutY="184.0" text="Actividades:" />
+      <Separator layoutX="13.0" layoutY="342.0" prefHeight="17.0" prefWidth="639.0" />
+      <ComboBox fx:id="cmbPeriodo" layoutX="38.0" layoutY="77.0" prefHeight="25.0" prefWidth="175.0" />
+      <ComboBox fx:id="cmbCoordinador" layoutX="258.0" layoutY="77.0" prefHeight="25.0" prefWidth="175.0" />
+      <ComboBox fx:id="cmbAcademia" layoutX="258.0" layoutY="28.0" prefHeight="25.0" prefWidth="175.0" />
+      <Label layoutX="258.0" layoutY="11.0" text="Academia" />
+   </children>
+</AnchorPane>
