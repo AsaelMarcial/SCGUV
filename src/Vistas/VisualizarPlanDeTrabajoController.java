@@ -84,7 +84,6 @@ public class VisualizarPlanDeTrabajoController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         planObservable = FXCollections.observableArrayList();
-        tbcActividadesOperacion.setResizable(true);
 
         actividades = FXCollections.observableArrayList();
         this.tbcActividadesActividad.setCellValueFactory(new PropertyValueFactory("nombre"));
