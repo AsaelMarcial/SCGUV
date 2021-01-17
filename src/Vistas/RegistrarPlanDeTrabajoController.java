@@ -3,15 +3,19 @@ package Vistas;
 import BaseDeDatos.ConexionBD;
 import Pojos.Academia;
 import Pojos.Academico;
+import Pojos.ActividadPlanTrabajoAcademia;
 import Pojos.ExperienciaEducativa;
 import Pojos.Periodo;
+import Pojos.TemaPlanTrabajoAcademia;
 import Util.Herramientas;
+import static java.lang.Integer.parseInt;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -29,6 +33,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.KeyEvent;
 
 public class RegistrarPlanDeTrabajoController implements Initializable {
 
@@ -56,14 +64,14 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     @FXML
     private TextField txfOperacion;
     @FXML
-    private TextField txfParcial;
-    @FXML
     private TextField txfTema;
     @FXML
     private TextField txfCoordinador;
     
     @FXML
-    private TableView<?> tablevActividades;
+    private TableView<ActividadPlanTrabajoAcademia> tablevActividades;
+    ObservableList<ActividadPlanTrabajoAcademia> actividades;
+    
     @FXML
     private TableColumn tbcActividadesActividad;
     @FXML
@@ -72,13 +80,19 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     private TableColumn tbcActividadesOperacion;
     
     @FXML
-    private TableView<?> tablevTemas;
+    private TableView<TemaPlanTrabajoAcademia> tablevTemas;
+    ObservableList<TemaPlanTrabajoAcademia> temas;
+    
     @FXML
     private TableColumn tbcTemasExperienciaEducativa;
     @FXML
     private TableColumn tbcTemasParcial;
     @FXML
     private TableColumn tbcTemasTema;
+    
+    @FXML
+    private ComboBox<String> cmbParcial;
+    ObservableList<String> parciales;
     
     @FXML
     private ComboBox<Periodo> cmbPeriodo;
@@ -99,6 +113,7 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
         datepFecha.setDayCellFactory(picker -> new DateCell() {
         public void updateItem(LocalDate date, boolean empty) {
             super.updateItem(date, empty);
@@ -108,13 +123,28 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     });
         datepFecha.setEditable(false);
         
+        parciales = FXCollections.observableArrayList();
         periodos = FXCollections.observableArrayList();
         academias = FXCollections.observableArrayList();
         coordinadores = FXCollections.observableArrayList();
         experienciasEducativas = FXCollections.observableArrayList();
         
+        actividades = FXCollections.observableArrayList();
+        this.tbcActividadesActividad.setCellValueFactory(new PropertyValueFactory("nombre"));
+        this.tbcActividadesFecha.setCellValueFactory(new PropertyValueFactory("fecha"));
+        this.tbcActividadesOperacion.setCellValueFactory(new PropertyValueFactory("operacion"));
+        
+        temas = FXCollections.observableArrayList();
+        this.tbcTemasTema.setCellValueFactory(new PropertyValueFactory("nombre"));
+        this.tbcTemasParcial.setCellValueFactory(new PropertyValueFactory("parcial"));
+        this.tbcTemasExperienciaEducativa.setCellValueFactory(new PropertyValueFactory("nombreExperienciaEducativa"));
+        
         cargarComboBoxPeriodo();
         cargarComboBoxAcademia();
+        
+        parciales.add("Primer parcial");
+        parciales.add("Segundo parcial");
+        cmbParcial.setItems(parciales);
         
         cmbAcademia.valueProperty().addListener(new ChangeListener<Academia>(){
             @Override
@@ -239,15 +269,43 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     
     @FXML
     private void clicAgregarActividad(ActionEvent event) {
+        ActividadPlanTrabajoAcademia actividad = new ActividadPlanTrabajoAcademia();
+        LocalDate fecha = datepFecha.getValue();
+        
+        actividad.setNombre(txfActividad.getText());
+        actividad.setFecha(fecha.toString());
+        actividad.setOperacion(txfOperacion.getText());
+        
+        actividades.add(actividad);
+        tablevActividades.setItems(actividades);
+        btnAgregarActividad.setDisable(true);
+    }
+    
+    @FXML
+    private void clicAgregarTema(ActionEvent event) {
+        TemaPlanTrabajoAcademia tema = new TemaPlanTrabajoAcademia();
+        ExperienciaEducativa ee = new ExperienciaEducativa();
+        ee = cmbExperienciaEducativa.getSelectionModel().getSelectedItem();
+        int parcialSeleccionado = parseInt(cmbParcial.getSelectionModel().getSelectedItem());
+        
+        tema.setNombre(txfTema.getText());
+        tema.setParcial(parcialSeleccionado);
+        tema.setIdExperienciaEducativa(ee.getIdExperienciaEduactiva());
+        temas.add(tema);
+        tablevTemas.setItems(temas);
+        btnAgregarTema.setDisable(true);
+    }
+    
+
+    @FXML
+    private void escrituraCampoOperacion(InputMethodEvent event) {
     }
 
     @FXML
     private void clicEliminarActividad(ActionEvent event) {
     }
 
-    @FXML
-    private void clicAgregarTema(ActionEvent event) {
-    }
+    
 
     @FXML
     private void clicEliminarTema(ActionEvent event) {
@@ -260,5 +318,12 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     @FXML
     private void clicRegistrar(ActionEvent event) {
     }
+
+    @FXML
+    private void escrituraCampoAcitividad(KeyEvent event) {
+         btnAgregarActividad.setDisable(false);
+    }
+
+    
     
 }

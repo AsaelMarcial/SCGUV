@@ -38,16 +38,15 @@
       <Label layoutX="37.0" layoutY="131.0" text="Actividad" />
       <Label layoutX="223.0" layoutY="131.0" text="Fecha" />
       <Label layoutX="411.0" layoutY="131.0" text="Operacion" />
-      <TextField fx:id="txfActividad" layoutX="35.0" layoutY="147.0" prefHeight="25.0" prefWidth="175.0" style="-fx-background-color: #E9EBEE;" />
-      <DatePicker fx:id="datepFecha" layoutX="224.0" layoutY="147.0" />
-      <TextField fx:id="txfOperacion" layoutX="411.0" layoutY="147.0" prefHeight="25.0" prefWidth="201.0" style="-fx-background-color: #E9EBEE;" />
-      <Button fx:id="btnAgregarActividad" layoutX="601.0" layoutY="201.0" mnemonicParsing="false" onAction="#clicAgregarActividad" prefHeight="25.0" prefWidth="59.0" style="-fx-background-color: #5ADE65;" text="Agregar" />
+      <TextField fx:id="txfActividad" layoutX="35.0" layoutY="147.0" onKeyTyped="#escrituraCampoAcitividad" prefHeight="25.0" prefWidth="175.0" style="-fx-background-color: #E9EBEE;" />
+      <DatePicker fx:id="datepFecha" editable="false" layoutX="224.0" layoutY="147.0" />
+      <TextField fx:id="txfOperacion" layoutX="411.0" layoutY="147.0" onInputMethodTextChanged="#escrituraCampoOperacion" prefHeight="25.0" prefWidth="201.0" style="-fx-background-color: #E9EBEE;" />
+      <Button fx:id="btnAgregarActividad" disable="true" layoutX="601.0" layoutY="201.0" mnemonicParsing="false" onAction="#clicAgregarActividad" prefHeight="25.0" prefWidth="59.0" style="-fx-background-color: #5ADE65;" text="Agregar" />
       <Button fx:id="btnEliminarActividad" layoutX="601.0" layoutY="235.0" mnemonicParsing="false" onAction="#clicEliminarActividad" style="-fx-background-color: #F16D55;" text="Eliminar" />
       <Separator layoutX="13.0" layoutY="114.0" prefHeight="17.0" prefWidth="639.0" />
       <Label layoutX="37.0" layoutY="363.0" text="EE:" />
       <ComboBox fx:id="cmbExperienciaEducativa" layoutX="35.0" layoutY="380.0" prefHeight="25.0" prefWidth="175.0" />
-      <Label layoutX="220.0" layoutY="363.0" text="Parcial:" />
-      <TextField fx:id="txfParcial" layoutX="223.0" layoutY="380.0" prefHeight="25.0" prefWidth="175.0" style="-fx-background-color: #E9EBEE;" />
+      <Label layoutX="225.0" layoutY="363.0" text="Parcial:" />
       <Label layoutX="411.0" layoutY="363.0" text="Tema:" />
       <TextField fx:id="txfTema" layoutX="411.0" layoutY="380.0" prefHeight="25.0" prefWidth="201.0" style="-fx-background-color: #E9EBEE;" />
       <Button fx:id="btnRegistrar" layoutX="310.0" layoutY="591.0" mnemonicParsing="false" onAction="#clicRegistrar" prefHeight="35.0" prefWidth="91.0" style="-fx-background-color: #27B232;" text="Registrar" textFill="WHITE" />
@@ -59,5 +58,6 @@
       <ComboBox fx:id="cmbAcademia" layoutX="258.0" layoutY="28.0" prefHeight="25.0" prefWidth="175.0" />
       <Label layoutX="258.0" layoutY="11.0" text="Academia" />
       <TextField fx:id="txfCoordinador" editable="false" layoutX="258.0" layoutY="77.0" prefHeight="25.0" prefWidth="175.0" />
+      <ComboBox fx:id="cmbParcial" layoutX="225.0" layoutY="380.0" prefHeight="25.0" prefWidth="175.0" />
    </children>
 </AnchorPane>
