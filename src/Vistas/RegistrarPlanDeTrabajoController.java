@@ -40,6 +40,7 @@ import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 public class RegistrarPlanDeTrabajoController implements Initializable {
 
@@ -377,10 +378,6 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     }
 
     @FXML
-    private void clicCancelar(ActionEvent event) {
-    }
-
-    @FXML
     private void clicRegistrar(ActionEvent event) {
         String nombre = txfNombrePlan.getText();
         String objetivo = txaObjetivoGeneral.getText();
@@ -397,9 +394,22 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
                 periodo = cmbPeriodo.getSelectionModel().getSelectedItem();
                 int idPeriodo = periodo.getIdPeriodo();
            
+                
                 registrarPlan(nombre, objetivo, idAcademia, idCoordinador, idPeriodo);
-                registrarActividades();
 
+                ObservableList<ActividadPlanTrabajoAcademia> iterarActividades = actividades;
+                for (ActividadPlanTrabajoAcademia actividadIndice : iterarActividades){
+
+                    registrarActividades(actividadIndice.getNombre(), actividadIndice.getFecha(), actividadIndice.getOperacion());
+                }
+                
+                ObservableList<TemaPlanTrabajoAcademia> iterarTemas = temas;
+                for (TemaPlanTrabajoAcademia temaIndice : iterarTemas){
+
+                    registrarTemas(temaIndice.getNombre(), temaIndice.getParcial(), temaIndice.getIdExperienciaEducativa());
+                }
+                
+                concluirRegistro();
                 
                 return;
            }else{
@@ -476,8 +486,60 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
         
     }
     
-    private void registrarActividades(){
-        System.out.println(idPlanRegistrado);
+    private void registrarActividades(String nombre, String fecha, String operacion){
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        if(conn != null){
+            try{
+             String consulta = "INSERT INTO planAcademiaActividad (nombre, fecha, operacion, idPlanAcademia) VALUES (?, ?, ?, ?)";
+             PreparedStatement ps = conn.prepareStatement(consulta);
+             ps.setString(1, nombre);
+             ps.setString(2, fecha);
+             ps.setString(3, operacion);
+             ps.setInt(4, idPlanRegistrado);
+             
+             ps.executeUpdate();
+             ps.close();
+             conn.close();
+            }catch(SQLException ex){
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion.showAndWait();   
+            }
+        }else{
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+    }
+    
+    private void registrarTemas(String nombre, int parcial, int idExperienciaEducativa){
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        if(conn != null){
+            try{
+             String consulta = "INSERT INTO planAcademiaTema(nombre, parcial, idExperienciaEducativa, idPlanAcademia) VALUES (?, ?, ?, ?)";
+             PreparedStatement ps = conn.prepareStatement(consulta);
+             ps.setString(1, nombre);
+             ps.setInt(2, parcial);
+             ps.setInt(3, idExperienciaEducativa);
+             ps.setInt(4, idPlanRegistrado);
+             
+             ps.executeUpdate();
+             ps.close();
+             conn.close();
+            }catch(SQLException ex){
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion.showAndWait();   
+            }
+        }else{
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+    }
+    
+    private void concluirRegistro(){
+        alertConexion = Herramientas.constructorDeAlertas("Registro exitoso", 
+                    "Se ha concluido con el registro del plan de trabajo de academia", Alert.AlertType.INFORMATION);
+        alertConexion.showAndWait();
+        Stage stage = (Stage) btnCancelar.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -501,6 +563,12 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
         }else{
             btnEliminarTema.setDisable(true);
         }
+    }
+    
+    @FXML
+    private void clicCancelar(ActionEvent event) {
+        Stage stage = (Stage) btnCancelar.getScene().getWindow();
+        stage.close();
     }
     
     
