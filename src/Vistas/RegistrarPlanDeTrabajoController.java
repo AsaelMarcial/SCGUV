@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -109,6 +110,7 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     ObservableList<ExperienciaEducativa> experienciasEducativas;
     
     ObservableList<Academico> coordinadores;
+    private int idPlanRegistrado;
     
     Alert alertConexion;
     
@@ -396,6 +398,9 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
                 int idPeriodo = periodo.getIdPeriodo();
            
                 registrarPlan(nombre, objetivo, idAcademia, idCoordinador, idPeriodo);
+                registrarActividades();
+
+                
                 return;
            }else{
                 alertConexion = Herramientas.constructorDeAlertas("Tablas vacías", 
@@ -436,19 +441,32 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
         if(conn != null){
             try{
              String consulta = "INSERT INTO planAcademia (nombre, objetivo, idAcademia, idPeriodo, idCoordinador) VALUES (?, ?, ?, ?, ?)";
-             PreparedStatement ps = conn.prepareStatement(consulta);
+             PreparedStatement ps = conn.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS);
              ps.setString(1, nombre);
              ps.setString(2, objetivo);
              ps.setInt(3, idAcademia);
              ps.setInt(4, idPeriodo);
              ps.setInt(5, idCoordinador);
              
-             ps.executeUpdate();
-             ps.close();
+             int affectedRows = ps.executeUpdate();
+             if (affectedRows == 0) {
+                throw new SQLException("Creating user failed, no rows affected.");
+             }
              
+             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                idPlanRegistrado = (int) generatedKeys.getLong(1);
+                }
+                else {
+                    throw new SQLException("Creating user failed, no ID obtained.");
+                }
+             }
+             
+             ps.close();
+
              conn.close();
             }catch(SQLException ex){
-                alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta", Alert.AlertType.ERROR);
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
                 alertConexion.showAndWait();   
             }
         }else{
@@ -456,6 +474,10 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
             alertConexion.showAndWait();
         }
         
+    }
+    
+    private void registrarActividades(){
+        System.out.println(idPlanRegistrado);
     }
 
     @FXML
