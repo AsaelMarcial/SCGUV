@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -22,6 +23,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -97,6 +99,15 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        datepFecha.setDayCellFactory(picker -> new DateCell() {
+        public void updateItem(LocalDate date, boolean empty) {
+            super.updateItem(date, empty);
+            LocalDate hoy = LocalDate.now();
+            setDisable(empty || date.compareTo(hoy) < 0 );
+        }
+    });
+        datepFecha.setEditable(false);
+        
         periodos = FXCollections.observableArrayList();
         academias = FXCollections.observableArrayList();
         coordinadores = FXCollections.observableArrayList();
