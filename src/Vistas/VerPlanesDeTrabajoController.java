@@ -150,10 +150,10 @@ public class VerPlanesDeTrabajoController implements Initializable {
             controlador.pasarPlan(plan);
            
 
-            Scene sceneOpcion = new Scene(root);
+            Scene scene= new Scene(root);
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(sceneOpcion);
+            stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Actualizar plan de trabajo de academia");
             stage.showAndWait();
@@ -171,6 +171,21 @@ public class VerPlanesDeTrabajoController implements Initializable {
     
     @FXML
     private void clicRegistrarPlan(ActionEvent event) {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("RegistrarPlanDeTrabajo.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Registrar plan de trabajo de academia");
+            stage.showAndWait();
+        
+        }catch(IOException ex){
+            System.out.println("Error al cargar FXML ->  "+ex.getMessage());
+        }
+        
     }
 
     @FXML
