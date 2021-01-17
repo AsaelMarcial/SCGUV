@@ -22,6 +22,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -37,6 +38,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 
 public class RegistrarPlanDeTrabajoController implements Initializable {
 
@@ -108,6 +110,8 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     
     ObservableList<Academico> coordinadores;
     
+    Alert alertConexion;
+    
     /**
      * Initializes the controller class.
      */
@@ -153,6 +157,7 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
                 if(newValue != null){
                 cargarCoordinador(newValue.getIdCoordinador());
                 cargarComboBoxExperienciaEducativa(newValue.getIdAcademia());
+                cmbExperienciaEducativa.setDisable(false);
                 }
             }
         });
@@ -177,7 +182,6 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     
     private void cargarComboBoxPeriodo(){
         Connection conn = ConexionBD.iniciarConexionMySQL();
-        Alert alertConexion;
         if(conn != null){
             try{
              String consulta = "SELECT * FROM periodo";
@@ -203,7 +207,6 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     
     private void cargarComboBoxAcademia(){
         Connection conn = ConexionBD.iniciarConexionMySQL();
-        Alert alertConexion;
         if(conn != null){
             try{
              String consulta = "SELECT * FROM academia";
@@ -231,7 +234,6 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     
     private void cargarComboBoxExperienciaEducativa(int idAcademia){
         Connection conn = ConexionBD.iniciarConexionMySQL();
-        Alert alertConexion;
         experienciasEducativas.clear();
         if(conn != null){
             try{
@@ -260,7 +262,6 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     
     private void cargarCoordinador(int idCoordinador){
         Connection conn = ConexionBD.iniciarConexionMySQL();
-        Alert alertConexion;
         if(conn != null){
             try{
              String consulta = "SELECT * FROM academico WHERE idAcademico = "+idCoordinador;
@@ -282,52 +283,95 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     }
     
     @FXML
+    private void activarBotonActividad(KeyEvent event) {
+        btnAgregarActividad.setDisable(false);
+    }
+
+    private void activarBotonActividad(Event event) {
+        btnAgregarActividad.setDisable(false);
+    }
+
+    @FXML
+    private void activarBotonTema(Event event) {
+        btnAgregarTema.setDisable(false);
+    }
+    
+    
+    @FXML
     private void clicAgregarActividad(ActionEvent event) {
         ActividadPlanTrabajoAcademia actividad = new ActividadPlanTrabajoAcademia();
-        LocalDate fecha = datepFecha.getValue();
+        String nombre = txfActividad.getText();
+        String operacion = txfOperacion.getText();
         
-        actividad.setNombre(txfActividad.getText());
-        actividad.setFecha(fecha.toString());
-        actividad.setOperacion(txfOperacion.getText());
+        if(datepFecha.getValue() != null){
+            LocalDate ldFecha = datepFecha.getValue();
+
+            String fecha = ldFecha.toString();
+            if( !(nombre.isEmpty() || operacion.isEmpty()) ){
+                actividad.setNombre(nombre);
+                actividad.setFecha(fecha);
+                actividad.setOperacion(operacion);
         
-        actividades.add(actividad);
-        tablevActividades.setItems(actividades);
-        btnAgregarActividad.setDisable(true);
+                actividades.add(actividad);
+                tablevActividades.setItems(actividades);
+                btnAgregarActividad.setDisable(true);
+                return;
+            }
+        }
+            alertConexion = Herramientas.constructorDeAlertas("Campos incorrectos", 
+                    "Existen campos faltantes o son incorrectos para agregar un nuevo tema a la tabla", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+            
     }
+    
     
     @FXML
     private void clicAgregarTema(ActionEvent event) {
         TemaPlanTrabajoAcademia tema = new TemaPlanTrabajoAcademia();
         ExperienciaEducativa ee = new ExperienciaEducativa();
         ee = cmbExperienciaEducativa.getSelectionModel().getSelectedItem();
-        
-        String parcialSeleccionado = cmbParcial.getSelectionModel().getSelectedItem();
-        if(parcialSeleccionado == "Primer parcial"){
-             tema.setParcial(1);
-        }else{
-             tema.setParcial(2);
+        String nombre = txfTema.getText();
+        if(ee != null){
+            String parcialSeleccionado = cmbParcial.getSelectionModel().getSelectedItem();
+            if(!(parcialSeleccionado.isEmpty())){
+                if(!nombre.isEmpty()){
+                    if(parcialSeleccionado == "Primer parcial")
+                        tema.setParcial(1);
+                    else
+                        tema.setParcial(2);
+                    tema.setNombre(nombre);
+                    tema.setIdExperienciaEducativa(ee.getIdExperienciaEduactiva());
+                    tema.setNombreExperienciaEducativa(ee.getNombreExperienciaEducativa());
+                    temas.add(tema);
+                    tablevTemas.setItems(temas);
+                    btnAgregarTema.setDisable(true);
+                    return;
+                }
+                
+            }
         }
-        tema.setNombre(txfTema.getText());
-        tema.setIdExperienciaEducativa(ee.getIdExperienciaEduactiva());
-        tema.setNombreExperienciaEducativa(ee.getNombreExperienciaEducativa());
-        temas.add(tema);
-        tablevTemas.setItems(temas);
-        btnAgregarTema.setDisable(true);
-    }
+        alertConexion = Herramientas.constructorDeAlertas("Campos incorrectos", 
+                    "Existen campos faltantes o son incorrectos para agregar una nueva actividad a la tabla", Alert.AlertType.ERROR);
+        alertConexion.showAndWait();
+        }
+        
+    
+    
     
 
-    @FXML
-    private void escrituraCampoOperacion(InputMethodEvent event) {
-    }
 
     @FXML
     private void clicEliminarActividad(ActionEvent event) {
+        actividades.remove(tablevActividades.getSelectionModel().getSelectedItem());
+        tablevActividades.setItems(actividades);
+        btnEliminarTema.setDisable(true);
     }
-
-    
 
     @FXML
     private void clicEliminarTema(ActionEvent event) {
+        temas.remove(tablevTemas.getSelectionModel().getSelectedItem());
+        tablevTemas.setItems(temas);
+        btnEliminarTema.setDisable(true);
     }
 
     @FXML
@@ -339,10 +383,19 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     }
 
     @FXML
-    private void escrituraCampoAcitividad(KeyEvent event) {
-         btnAgregarActividad.setDisable(false);
+    private void seleccionaFecha(Event event) {
+        btnAgregarActividad.setDisable(false);
     }
 
+    @FXML
+    private void clicElementoActividades(MouseEvent event) {
+    }
+
+    @FXML
+    private void clicElementoTemas(MouseEvent event) {
+    }
     
+    
+
     
 }
