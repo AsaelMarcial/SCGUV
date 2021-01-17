@@ -380,6 +380,82 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
 
     @FXML
     private void clicRegistrar(ActionEvent event) {
+        String nombre = txfNombrePlan.getText();
+        String objetivo = txaObjetivoGeneral.getText();
+       
+       if(validarSeleccionElementosPlan() && validarCamposPlan(nombre, objetivo)){
+           if(!actividades.isEmpty() && !temas.isEmpty()){
+               
+               Academia academia = new Academia();
+                academia = cmbAcademia.getSelectionModel().getSelectedItem();
+                int idAcademia = academia.getIdAcademia();
+                int idCoordinador = academia.getIdCoordinador();
+           
+                Periodo periodo = new Periodo();
+                periodo = cmbPeriodo.getSelectionModel().getSelectedItem();
+                int idPeriodo = periodo.getIdPeriodo();
+           
+                registrarPlan(nombre, objetivo, idAcademia, idCoordinador, idPeriodo);
+                return;
+           }else{
+                alertConexion = Herramientas.constructorDeAlertas("Tablas vacías", 
+                    "Debe agregar Actividades y Temas al Plan de curso antes de registrarlo", Alert.AlertType.ERROR);
+                alertConexion.showAndWait();
+           } 
+       }else{
+            alertConexion = Herramientas.constructorDeAlertas("Campos incorrectos", 
+                    "Existen campos faltantes o son incorrectos para registrar el plan de curso", Alert.AlertType.ERROR);
+             alertConexion.showAndWait();
+       }
+           
+    }
+    
+    private boolean validarSeleccionElementosPlan(){
+        if(cmbPeriodo.getSelectionModel().getSelectedItem() == null)
+            return false;
+        
+        if(cmbAcademia.getSelectionModel().getSelectedItem() == null)
+            return false;
+
+        return true;
+    }
+    
+    private boolean validarCamposPlan(String nombre, String objetivo){
+       if(nombre.isEmpty())
+           return false;
+       
+       if(objetivo.isEmpty())
+           return false;
+        
+        
+        return true;
+    }
+    
+    private void registrarPlan(String nombre, String objetivo, int idAcademia, int idPeriodo, int idCoordinador){
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        if(conn != null){
+            try{
+             String consulta = "INSERT INTO planAcademia (nombre, objetivo, idAcademia, idPeriodo, idCoordinador) VALUES (?, ?, ?, ?, ?)";
+             PreparedStatement ps = conn.prepareStatement(consulta);
+             ps.setString(1, nombre);
+             ps.setString(2, objetivo);
+             ps.setInt(3, idAcademia);
+             ps.setInt(4, idPeriodo);
+             ps.setInt(5, idCoordinador);
+             
+             ps.executeUpdate();
+             ps.close();
+             
+             conn.close();
+            }catch(SQLException ex){
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta", Alert.AlertType.ERROR);
+                alertConexion.showAndWait();   
+            }
+        }else{
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+        
     }
 
     @FXML
@@ -389,10 +465,20 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
 
     @FXML
     private void clicElementoActividades(MouseEvent event) {
+        if (tablevActividades.hasProperties()){
+            btnEliminarActividad.setDisable(false);
+        }else{
+            btnEliminarActividad.setDisable(true);
+        }
     }
 
     @FXML
     private void clicElementoTemas(MouseEvent event) {
+        if (tablevTemas.hasProperties()){
+            btnEliminarTema.setDisable(false);
+        }else{
+            btnEliminarTema.setDisable(true);
+        }
     }
     
     
