@@ -11,7 +11,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="641.0" prefWidth="710.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vistas.RegistrarPlanDeTrabajoController">
+<AnchorPane id="AnchorPane" prefHeight="641.0" prefWidth="710.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vistas.ActualizarPlanDeTrabajoController">
    <children>
       <Label layoutX="41.0" layoutY="11.0" text="Nombre del plan:" />
       <TextField fx:id="txfNombrePlan" layoutX="38.0" layoutY="28.0" prefHeight="25.0" prefWidth="175.0" style="-fx-background-color: #E9EBEE;" />

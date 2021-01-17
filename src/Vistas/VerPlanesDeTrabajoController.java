@@ -147,7 +147,7 @@ public class VerPlanesDeTrabajoController implements Initializable {
              
             Parent root = loader.load();
             
-            VisualizarPlanDeTrabajoController controlador = loader.getController();
+            ActualizarPlanDeTrabajoController controlador = loader.getController();
             controlador.pasarPlan(plan);
            
 
@@ -158,6 +158,7 @@ public class VerPlanesDeTrabajoController implements Initializable {
             stage.setResizable(false);
             stage.setTitle("Actualizar plan de trabajo de academia");
             stage.showAndWait();
+            
             CargaListaDePlanes();
         
         }catch(IOException ex){

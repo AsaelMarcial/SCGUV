@@ -113,7 +113,6 @@ public class VisualizarPlanDeTrabajoController implements Initializable {
         cargarDato("SELECT nombre FROM academico WHERE idAcademico = "+p.getIdCoordinador(), txfCoordinador, "nombre");
         cargarActividades();
         cargarTemas();
-        
     }
     
     

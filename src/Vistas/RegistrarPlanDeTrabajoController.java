@@ -6,6 +6,7 @@ import Pojos.Academico;
 import Pojos.ActividadPlanTrabajoAcademia;
 import Pojos.ExperienciaEducativa;
 import Pojos.Periodo;
+import Pojos.PlanTrabajoAcademia;
 import Pojos.TemaPlanTrabajoAcademia;
 import Util.Herramientas;
 import static java.lang.Integer.parseInt;
@@ -54,8 +55,6 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     private Button btnAgregarTema;
     @FXML
     private Button btnEliminarTema;
-    @FXML
-    private Button btnRegistrar;
     
     @FXML
     private TextField txfNombrePlan;
@@ -114,6 +113,8 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     private int idPlanRegistrado;
     
     Alert alertConexion;
+    @FXML
+    private Button btnActualizar;
     
 
     
@@ -128,6 +129,7 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
         }
     });
         datepFecha.setEditable(false);
+        
         
         parciales = FXCollections.observableArrayList();
         periodos = FXCollections.observableArrayList();
@@ -359,7 +361,6 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
         btnEliminarTema.setDisable(true);
     }
 
-    @FXML
     private void clicRegistrar(ActionEvent event) {
         String nombre = txfNombrePlan.getText();
         String objetivo = txaObjetivoGeneral.getText();
@@ -565,6 +566,10 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     @FXML
     private void activarBotonTema(Event event) {
         btnAgregarTema.setDisable(false);
+    }
+
+    @FXML
+    private void clicActualizar(ActionEvent event) {
     }
     
 }
