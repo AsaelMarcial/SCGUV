@@ -115,9 +115,8 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     
     Alert alertConexion;
     
-    /**
-     * Initializes the controller class.
-     */
+
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
@@ -152,6 +151,7 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
         parciales.add("Primer parcial");
         parciales.add("Segundo parcial");
         cmbParcial.setItems(parciales);
+        
         
         cmbAcademia.valueProperty().addListener(new ChangeListener<Academia>(){
             @Override
@@ -285,19 +285,6 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
         }
     }
     
-    @FXML
-    private void activarBotonActividad(KeyEvent event) {
-        btnAgregarActividad.setDisable(false);
-    }
-
-    private void activarBotonActividad(Event event) {
-        btnAgregarActividad.setDisable(false);
-    }
-
-    @FXML
-    private void activarBotonTema(Event event) {
-        btnAgregarTema.setDisable(false);
-    }
     
     
     @FXML
@@ -357,12 +344,7 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
                     "Existen campos faltantes o son incorrectos para agregar una nueva actividad a la tabla", Alert.AlertType.ERROR);
         alertConexion.showAndWait();
         }
-        
     
-    
-    
-
-
     @FXML
     private void clicEliminarActividad(ActionEvent event) {
         actividades.remove(tablevActividades.getSelectionModel().getSelectedItem());
@@ -543,11 +525,6 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     }
 
     @FXML
-    private void seleccionaFecha(Event event) {
-        btnAgregarActividad.setDisable(false);
-    }
-
-    @FXML
     private void clicElementoActividades(MouseEvent event) {
         if (tablevActividades.hasProperties()){
             btnEliminarActividad.setDisable(false);
@@ -571,7 +548,23 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
         stage.close();
     }
     
-    
+    @FXML
+    private void seleccionaFecha(Event event) {
+        btnAgregarActividad.setDisable(false);
+    }
 
+    @FXML
+    private void activarBotonActividad(KeyEvent event) {
+        btnAgregarActividad.setDisable(false);
+    }
+
+    private void activarBotonActividad(Event event) {
+        btnAgregarActividad.setDisable(false);
+    }
+
+    @FXML
+    private void activarBotonTema(Event event) {
+        btnAgregarTema.setDisable(false);
+    }
     
 }

@@ -67,6 +67,7 @@ public class VerPlanesDeTrabajoController implements Initializable {
     }    
     
     private void CargaListaDePlanes(){
+        planes.removeAll(planes);
         Connection conn = ConexionBD.iniciarConexionMySQL();
         Alert alertConexion;
         if(conn != null){
@@ -157,6 +158,7 @@ public class VerPlanesDeTrabajoController implements Initializable {
             stage.setResizable(false);
             stage.setTitle("Actualizar plan de trabajo de academia");
             stage.showAndWait();
+            CargaListaDePlanes();
         
         }catch(IOException ex){
             System.out.println("Error al cargar FXML ->  "+ex.getMessage());
@@ -181,6 +183,7 @@ public class VerPlanesDeTrabajoController implements Initializable {
             stage.setResizable(false);
             stage.setTitle("Registrar plan de trabajo de academia");
             stage.showAndWait();
+            CargaListaDePlanes();
         
         }catch(IOException ex){
             System.out.println("Error al cargar FXML ->  "+ex.getMessage());
