@@ -149,15 +149,29 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
         cmbAcademia.valueProperty().addListener(new ChangeListener<Academia>(){
             @Override
             public void changed(ObservableValue<? extends Academia> observable, Academia oldValue, Academia newValue) {
-                
                 txfCoordinador.setText("");
-
                 if(newValue != null){
                 cargarCoordinador(newValue.getIdCoordinador());
                 cargarComboBoxExperienciaEducativa(newValue.getIdAcademia());
                 }
             }
-           
+        });
+        
+        cmbExperienciaEducativa.valueProperty().addListener(new ChangeListener<ExperienciaEducativa>(){
+            @Override
+            public void changed(ObservableValue<? extends ExperienciaEducativa> observable, ExperienciaEducativa oldValue, ExperienciaEducativa newValue) {
+                if(newValue != null){
+                    btnAgregarTema.setDisable(false);
+                }
+            }
+        });
+        
+        cmbParcial.valueProperty().addListener(new ChangeListener<String>(){
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                btnAgregarTema.setDisable(false);
+            }
+            
         });
     }
     
@@ -286,11 +300,16 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
         TemaPlanTrabajoAcademia tema = new TemaPlanTrabajoAcademia();
         ExperienciaEducativa ee = new ExperienciaEducativa();
         ee = cmbExperienciaEducativa.getSelectionModel().getSelectedItem();
-        int parcialSeleccionado = parseInt(cmbParcial.getSelectionModel().getSelectedItem());
         
+        String parcialSeleccionado = cmbParcial.getSelectionModel().getSelectedItem();
+        if(parcialSeleccionado == "Primer parcial"){
+             tema.setParcial(1);
+        }else{
+             tema.setParcial(2);
+        }
         tema.setNombre(txfTema.getText());
-        tema.setParcial(parcialSeleccionado);
         tema.setIdExperienciaEducativa(ee.getIdExperienciaEduactiva());
+        tema.setNombreExperienciaEducativa(ee.getNombreExperienciaEducativa());
         temas.add(tema);
         tablevTemas.setItems(temas);
         btnAgregarTema.setDisable(true);
