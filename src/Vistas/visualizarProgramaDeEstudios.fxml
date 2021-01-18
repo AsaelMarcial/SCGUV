@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="873.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vistas.VisualizarProgramaDeEstudiosController">
+   <children>
+      <Label layoutX="190.0" layoutY="31.0" text="Programa de experiencia educativa">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="63.0" layoutY="81.0" text="Area academica" />
+      <Label layoutX="63.0" layoutY="115.0" text="Programa educativo" />
+      <Label layoutX="63.0" layoutY="151.0" text="Campus" />
+      <Label layoutX="65.0" layoutY="213.0" text="Código" />
+      <Label layoutX="190.0" layoutY="213.0" text="Nombre de la experiencia educativa" />
+      <Label layoutX="63.0" layoutY="272.0" text="Modalidad" />
+      <Label layoutX="194.0" layoutY="272.0" text="Oportunidades de evaluación" />
+      <TextField fx:id="txtAreaAcademica" editable="false" layoutX="190.0" layoutY="77.0" prefHeight="25.0" prefWidth="357.0" />
+      <TextField fx:id="txtCarrera" editable="false" layoutX="190.0" layoutY="111.0" prefHeight="25.0" prefWidth="357.0" />
+      <TextField fx:id="txtCampus" editable="false" layoutX="190.0" layoutY="147.0" prefHeight="25.0" prefWidth="357.0" />
+      <TextField fx:id="txtCodigo" editable="false" layoutX="63.0" layoutY="233.0" prefHeight="25.0" prefWidth="116.0" />
+      <TextField fx:id="txtNombreEE" editable="false" layoutX="190.0" layoutY="233.0" prefHeight="25.0" prefWidth="268.0" />
+      <TextField fx:id="txtModalidad" editable="false" layoutX="65.0" layoutY="299.0" prefHeight="25.0" prefWidth="116.0" />
+      <TextField fx:id="txtOportunidades" editable="false" layoutX="194.0" layoutY="299.0" prefHeight="25.0" prefWidth="357.0" />
+      <TextField fx:id="txtCreditos" editable="false" layoutX="463.0" layoutY="233.0" prefHeight="25.0" prefWidth="84.0" />
+      <Label layoutX="463.0" layoutY="213.0" text="Creditos" />
+      <Label layoutX="67.0" layoutY="339.0" text="Fecha de elaboración" />
+      <Label layoutX="249.0" layoutY="339.0" text="Fecha de modificación" />
+      <Label layoutX="440.0" layoutY="339.0" text="Fecha de aprobación" />
+      <TextField fx:id="txtElaboracion" editable="false" layoutX="67.0" layoutY="361.0" prefHeight="25.0" prefWidth="113.0" />
+      <TextField fx:id="txtModificacion" editable="false" layoutX="246.0" layoutY="361.0" prefHeight="25.0" prefWidth="125.0" />
+      <TextField fx:id="txtAprobacion" editable="false" layoutX="441.0" layoutY="361.0" prefHeight="25.0" prefWidth="107.0" />
+      <Label layoutX="63.0" layoutY="409.0" text="Saberes teoricos" />
+      <TextArea fx:id="txtTeoricos" editable="false" layoutX="63.0" layoutY="426.0" prefHeight="69.0" prefWidth="156.0" />
+      <Text layoutX="240.0" layoutY="422.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Saberes heuristicos" />
+      <TextArea fx:id="txtHeuristicos" editable="false" layoutX="233.0" layoutY="426.0" prefHeight="69.0" prefWidth="156.0" />
+      <TextArea fx:id="txtAxiologicos" editable="false" layoutX="403.0" layoutY="426.0" prefHeight="69.0" prefWidth="149.0" />
+      <Text layoutX="403.0" layoutY="422.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Saberes axiologicos" />
+      <TableView fx:id="tablevBibliografia" layoutX="63.0" layoutY="531.0" prefHeight="115.0" prefWidth="492.0">
+        <columns>
+          <TableColumn fx:id="tbcAutor" prefWidth="122.0" text="Autor" />
+          <TableColumn fx:id="tbcTitulo" prefWidth="128.0" text="Titulo" />
+            <TableColumn fx:id="tbcEditorial" prefWidth="177.0" text="Editorial" />
+            <TableColumn fx:id="tbcAnio" prefWidth="64.0" text="Año" />
+        </columns>
+      </TableView>
+      <Label layoutX="63.0" layoutY="508.0" text="Bibliografía" />
+      <Label layoutX="63.0" layoutY="658.0" text="Criterios de evaluación" />
+      <TableView fx:id="tablevEvaluacion" layoutX="63.0" layoutY="685.0" prefHeight="130.0" prefWidth="492.0">
+        <columns>
+          <TableColumn fx:id="tbcEvidencia" prefWidth="102.0" text="Evidencia" />
+          <TableColumn fx:id="tbcCriterio" prefWidth="159.0" text="Criterio" />
+            <TableColumn fx:id="tbcAmbito" prefWidth="161.0" text="Ambito" />
+            <TableColumn fx:id="tbcPorcentaje" prefWidth="69.0" text="Porcentaje" />
+        </columns>
+      </TableView>
+      <Button fx:id="btCerrar" layoutX="508.0" layoutY="834.0" mnemonicParsing="false" onAction="#btCerrar" text="Cerrar" />
+   </children>
+</AnchorPane>

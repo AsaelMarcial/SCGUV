@@ -52,8 +52,8 @@ public class InicioCoordinadorController implements Initializable {
     }
 
     @FXML
-    private void clicVerProgramasDeEstudios(ActionEvent event) {
-        abrirOpciónCliqueada("VerPlanesDeCurso.fxml");
+    private void clicVerProgramasDeEstudios(ActionEvent event) throws IOException {
+        abrirOpciónCliqueada("verProgramaDeEstudios.fxml");
     }
     
     private void abrirOpciónCliqueada(String nombreFXML){
@@ -63,7 +63,8 @@ public class InicioCoordinadorController implements Initializable {
         stage.setScene(scene);
         
         }catch(IOException ex){
-            System.out.println("Error al cargar FXML"+ex.getMessage());
+            System.out.println("Error al cargar FXML"+ex.getMessage() + ex.getCause());
+
         }
     }
 }
