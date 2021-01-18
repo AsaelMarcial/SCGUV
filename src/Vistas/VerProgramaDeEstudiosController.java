@@ -122,10 +122,8 @@ public class VerProgramaDeEstudiosController implements Initializable {
         ProgramaEstudio programa = new ProgramaEstudio();
         programa = listvProgramaDeEstudios.getSelectionModel().getSelectedItem();
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("visualizarProgramaDeEstudios.fxml"));
-             
-            Parent root = loader.load();
-            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("visualizarProgramaDeEstudios.fxml"));        
+            Parent root = loader.load();         
             VisualizarProgramaDeEstudiosController controlador = loader.getController();
             controlador.pasarPrograma(programa);
            
@@ -135,8 +133,7 @@ public class VerProgramaDeEstudiosController implements Initializable {
             stage.setScene(sceneOpcion);
             stage.setResizable(false);
             stage.setTitle("Ver plan de trabajo de academia");
-            stage.showAndWait();
-        
+            stage.showAndWait();      
         }catch(IOException ex){
             System.out.println("Error al cargar FXML ->  "+ex.getMessage());
         }
