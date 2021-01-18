@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="915.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vistas.RegistrarProgramaDeEstudiosController">
+   <children>
+      <Label layoutX="170.0" layoutY="14.0" text="Registrar Programa de experiencia educativa">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="64.0" layoutY="48.0" text="Area academica" />
+      <Label layoutX="62.0" layoutY="79.0" text="Programa educativo" />
+      <Label layoutX="61.0" layoutY="112.0" text="Campus" />
+      <Label layoutX="63.0" layoutY="142.0" text="Código" />
+      <Label layoutX="190.0" layoutY="142.0" text="Acreditación" />
+      <Label layoutX="64.0" layoutY="191.0" text="Modalidad" />
+      <Label layoutX="191.0" layoutY="191.0" text="Oportunidades de evaluación" />
+      <TextField fx:id="txtCodigo" layoutX="58.0" layoutY="159.0" prefHeight="25.0" prefWidth="128.0" />
+      <TextField fx:id="txtAcreditacion" layoutX="191.0" layoutY="159.0" prefHeight="25.0" prefWidth="268.0" />
+      <TextField fx:id="txtModalidad" layoutX="58.0" layoutY="208.0" prefHeight="25.0" prefWidth="128.0" />
+      <TextField fx:id="txtOportunidades" layoutX="190.0" layoutY="208.0" prefHeight="25.0" prefWidth="357.0" />
+      <TextField fx:id="txtCreditos" layoutX="461.0" layoutY="159.0" prefHeight="25.0" prefWidth="84.0" />
+      <Label layoutX="458.0" layoutY="142.0" text="Creditos" />
+      <Label layoutX="66.0" layoutY="240.0" text="Fecha de elaboración" />
+      <Label layoutX="249.0" layoutY="240.0" text="Fecha de modificación" />
+      <Label layoutX="61.0" layoutY="295.0" text="Saberes teoricos" />
+      <TextArea fx:id="txtTeoricos" layoutX="55.0" layoutY="312.0" prefHeight="69.0" prefWidth="156.0" />
+      <Text layoutX="240.0" layoutY="308.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Saberes heuristicos" />
+      <TextArea fx:id="txtHeuristicos" layoutX="231.0" layoutY="312.0" prefHeight="69.0" prefWidth="156.0" />
+      <TextArea fx:id="txtAxiologicos" layoutX="402.0" layoutY="312.0" prefHeight="69.0" prefWidth="149.0" />
+      <Text layoutX="406.0" layoutY="308.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Saberes axiologicos" />
+      <TableView fx:id="tablevBibliografia" layoutX="65.0" layoutY="494.0" prefHeight="115.0" prefWidth="492.0">
+        <columns>
+          <TableColumn fx:id="tbcAutor" prefWidth="122.0" text="Autor" />
+          <TableColumn fx:id="tbcTitulo" prefWidth="128.0" text="Titulo" />
+            <TableColumn fx:id="tbcEditorial" prefWidth="177.0" text="Editorial" />
+            <TableColumn fx:id="tbcAnio" prefWidth="64.0" text="Año" />
+        </columns>
+      </TableView>
+      <Label layoutX="61.0" layoutY="393.0" text="Bibliografía">
+         <font>
+            <Font size="13.0" />
+         </font></Label>
+      <Label layoutX="62.0" layoutY="626.0" text="Criterios de evaluación">
+         <font>
+            <Font size="13.0" />
+         </font></Label>
+      <TableView fx:id="tablevEvaluacion" layoutX="63.0" layoutY="735.0" prefHeight="130.0" prefWidth="492.0">
+        <columns>
+          <TableColumn fx:id="tbcEvidencia" prefWidth="102.0" text="Evidencia" />
+          <TableColumn fx:id="tbcCriterio" prefWidth="159.0" text="Criterio" />
+            <TableColumn fx:id="tbcAmbito" prefWidth="161.0" text="Ambito" />
+            <TableColumn fx:id="tbcPorcentaje" prefWidth="69.0" text="Porcentaje" />
+        </columns>
+      </TableView>
+      <Button fx:id="btCancelar" layoutX="492.0" layoutY="876.0" mnemonicParsing="false" onAction="#btCancelar" text="Cancelar" />
+      <ComboBox fx:id="combAcademia" layoutX="187.0" layoutY="44.0" prefHeight="25.0" prefWidth="156.0" />
+      <ComboBox fx:id="combCarrera" layoutX="187.0" layoutY="75.0" prefHeight="25.0" prefWidth="156.0" />
+      <ComboBox fx:id="combCampus" layoutX="187.0" layoutY="108.0" prefHeight="25.0" prefWidth="156.0" />
+      <Label layoutX="61.0" layoutY="412.0" text="Autor" />
+      <Label layoutX="216.0" layoutY="412.0" text="Titulo" />
+      <Label layoutX="365.0" layoutY="412.0" text="Editorial" />
+      <Label layoutX="510.0" layoutY="412.0" text="Año" />
+      <TextField fx:id="txtAutor" layoutX="63.0" layoutY="429.0" prefHeight="25.0" prefWidth="140.0" />
+      <TextField fx:id="txtTitulo" layoutX="215.0" layoutY="429.0" prefHeight="25.0" prefWidth="140.0" />
+      <TextField fx:id="txtEditorial" layoutX="365.0" layoutY="429.0" prefHeight="25.0" prefWidth="128.0" />
+      <TextField fx:id="txtAnio" layoutX="508.0" layoutY="429.0" prefHeight="25.0" prefWidth="49.0" />
+      <Button fx:id="btnAddBibliografia" layoutX="64.0" layoutY="461.0" mnemonicParsing="false" onAction="#clicAddBibliografia" style="-fx-background-color: #5ADE65;" text="Agregar" />
+      <DatePicker fx:id="dateElaboracion" layoutX="63.0" layoutY="257.0" prefHeight="25.0" prefWidth="113.0" />
+      <DatePicker fx:id="dateModificacion" layoutX="252.0" layoutY="257.0" prefHeight="25.0" prefWidth="113.0" />
+      <Separator layoutX="2.0" layoutY="292.0" prefHeight="3.0" prefWidth="617.0" />
+      <Separator layoutX="2.0" layoutY="390.0" prefHeight="3.0" prefWidth="617.0" />
+      <Separator layoutY="617.0" prefHeight="3.0" prefWidth="617.0" />
+      <Button fx:id="btnAddEval" layoutX="66.0" layoutY="699.0" mnemonicParsing="false" onAction="#clicAddEval" style="-fx-background-color: #5ADE65;" text="Agregar" />
+      <TextField fx:id="txtPorcentaje" layoutX="484.0" layoutY="667.0" prefHeight="25.0" prefWidth="68.0" />
+      <TextField fx:id="txtAmbito" layoutX="349.0" layoutY="667.0" prefHeight="25.0" prefWidth="128.0" />
+      <TextField fx:id="txtCriterio" layoutX="217.0" layoutY="667.0" prefHeight="25.0" prefWidth="119.0" />
+      <TextField fx:id="txtEvidencia" layoutX="65.0" layoutY="667.0" prefHeight="25.0" prefWidth="140.0" />
+      <Label layoutX="482.0" layoutY="650.0" text="Porcentaje" />
+      <Label layoutX="349.0" layoutY="650.0" text="Ambito" />
+      <Label layoutX="218.0" layoutY="650.0" text="Criterio" />
+      <Label layoutX="63.0" layoutY="650.0" text="Evidencia" />
+      <Button fx:id="btnRegistrar" layoutX="407.0" layoutY="876.0" mnemonicParsing="false" onAction="#clicRegistrar" style="-fx-background-color: #5ADE65;" text="Registrar" textFill="#fffdfd">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnBorrarBibliografia" layoutX="147.0" layoutY="461.0" mnemonicParsing="false" onAction="#clicBorrarBibliografia" style="-fx-background-color: #F16D55;" text="Eliminar" />
+      <Button fx:id="btnBorrarEval" layoutX="147.0" layoutY="699.0" mnemonicParsing="false" onAction="#clicBorrarEval" style="-fx-background-color: #F16D55;" text="Eliminar" />
+      <Label layoutX="368.0" layoutY="92.0" text="Perfil" />
+      <TextArea fx:id="txtPerfil" layoutX="369.0" layoutY="110.0" prefHeight="25.0" prefWidth="175.0" />
+      <ComboBox fx:id="combExperiencia" layoutX="369.0" layoutY="63.0" prefHeight="25.0" prefWidth="175.0" />
+      <Label layoutX="372.0" layoutY="48.0" text="Experiencia Educativa" />
+   </children>
+</AnchorPane>

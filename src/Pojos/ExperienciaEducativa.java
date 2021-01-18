@@ -23,13 +23,13 @@ public class ExperienciaEducativa {
         return idExperienciaEducativa;
     }
 
-
     public int getIdExperienciaEducativa() {
-        return idExperienciaEducativa;
+        return idExperienciaEduactiva;
     }
 
-    public void setIdExperienciaEducativa(int idExperienciaEducativa) {
-        this.idExperienciaEducativa = idExperienciaEducativa;
+    public void setIdExperienciaEducativa(int idExperienciaEduactiva) {
+        this.idExperienciaEduactiva = idExperienciaEduactiva;
+
     }
 
     public String getNombreExperienciaEducativa() {
