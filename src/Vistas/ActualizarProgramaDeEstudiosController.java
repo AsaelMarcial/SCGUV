@@ -160,6 +160,7 @@ public class ActualizarProgramaDeEstudiosController implements Initializable {
         });
         dateAprobacion.setEditable(false);
 
+        obsListPrograma = FXCollections.observableArrayList();
         obsListAcademia = FXCollections.observableArrayList();
         obsListCarrera = FXCollections.observableArrayList();
         obsListCampus = FXCollections.observableArrayList();
@@ -181,12 +182,14 @@ public class ActualizarProgramaDeEstudiosController implements Initializable {
 
     public void pasarPrograma(ProgramaEstudio programa) {
         obsListPrograma.add(0, programa);
+        
         txtPerfil.setText(programa.getPerfil());
         txtCodigo.setText(programa.getCodigo());
         txtAcreditacion.setText(programa.getAcreditacion());
         txtCreditos.setText(String.valueOf(programa.getCreditos()));
         txtModalidad.setText(programa.getModalidad());
         txtOportunidades.setText(programa.getOportunidades());
+        
         cargarComboBoxAcademia();
         cargarComboBoxCarrera();
         cargarComboBoxCampus();
@@ -200,7 +203,7 @@ public class ActualizarProgramaDeEstudiosController implements Initializable {
         ProgramaEstudio programaRecibido = new ProgramaEstudio();
         programaRecibido = obsListPrograma.get(0);
         int idAcademia = programaRecibido.getIdAreaAcademica();
-        Academia academiaRecibida = new Academia();
+        
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if (conn != null) {
             try {
@@ -214,13 +217,8 @@ public class ActualizarProgramaDeEstudiosController implements Initializable {
                     a.setIdCoordinador(rs.getInt("idCoordinador"));
                     obsListAcademia.add(a);
 
-                    if (rs.getInt("idAcademia") == idAcademia) {
-                        academiaRecibida.setIdAcademia(idAcademia);
-                        academiaRecibida.setNombre(rs.getString("nombre"));
-                    }
                 }
                 combAcademia.setItems(obsListAcademia);
-                combAcademia.valueProperty().setValue(academiaRecibida);
                 conn.close();
 
             } catch (SQLException ex) {
@@ -236,8 +234,6 @@ public class ActualizarProgramaDeEstudiosController implements Initializable {
     private void cargarComboBoxCarrera() {
         ProgramaEstudio programaRecibido = new ProgramaEstudio();
         programaRecibido = obsListPrograma.get(0);
-        int idCarrera = programaRecibido.getIdCarrera();
-        Carrera carreraRecibida = new Carrera();
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if (conn != null) {
             try {
@@ -250,14 +246,8 @@ public class ActualizarProgramaDeEstudiosController implements Initializable {
                     carr.setNombre(rs.getString("nombre"));
                     carr.setIdFacultad(rs.getInt("idFacultad"));
                     obsListCarrera.add(carr);
-                    if (rs.getInt("idCarrera") == idCarrera) {
-                        carreraRecibida.setIdCarrera(idCarrera);
-                        carreraRecibida.setNombre(rs.getString("nombre"));
-                        carreraRecibida.setIdFacultad(rs.getInt("idFacultad"));
-                    }
                 }
                 combCarrera.setItems(obsListCarrera);
-                combCarrera.valueProperty().setValue(carreraRecibida);
                 conn.close();
 
             } catch (SQLException ex) {
@@ -273,8 +263,6 @@ public class ActualizarProgramaDeEstudiosController implements Initializable {
     private void cargarComboBoxCampus() {
         ProgramaEstudio programaRecibido = new ProgramaEstudio();
         programaRecibido = obsListPrograma.get(0);
-        int idCampus = programaRecibido.getIdCampus();
-        Campus campusRecibido = new Campus();
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if (conn != null) {
             try {
@@ -286,13 +274,9 @@ public class ActualizarProgramaDeEstudiosController implements Initializable {
                     camp.setIdCampus(rs.getInt("idCampus"));
                     camp.setNombre(rs.getString("nombre"));
                     obsListCampus.add(camp);
-                    if (rs.getInt("idCampus") == idCampus) {
-                        campusRecibido.setIdCampus(idCampus);
-                        campusRecibido.setNombre(rs.getString("nombre"));
-                    }
+                    
                 }
                 combCampus.setItems(obsListCampus);
-                combCampus.valueProperty().setValue(campusRecibido);
                 conn.close();
 
             } catch (SQLException ex) {
@@ -308,8 +292,6 @@ public class ActualizarProgramaDeEstudiosController implements Initializable {
     private void cargarComboBoxExperiencia() {
         ProgramaEstudio programaRecibido = new ProgramaEstudio();
         programaRecibido = obsListPrograma.get(0);
-        int idEE = programaRecibido.getIdExperienciaEducativa();
-        ExperienciaEducativa eeRecibida = new ExperienciaEducativa();
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if (conn != null) {
             try {
@@ -323,15 +305,9 @@ public class ActualizarProgramaDeEstudiosController implements Initializable {
                     e.setNrcExperienciaEducativa(rs.getString("nrc"));
                     e.setIdAcademia(rs.getInt("idAcademia"));
                     obsListEE.add(e);
-                    if (rs.getInt("idExperienciaEducativa") == idEE) {
-                        eeRecibida.setIdExperienciaEducativa(idEE);
-                        eeRecibida.setNombreExperienciaEducativa("nombre");
-                        eeRecibida.setNrcExperienciaEducativa("nrc");
-                        eeRecibida.setIdAcademia(rs.getInt("idAcademia"));
-                    }
+
                 }
                 combExperiencia.setItems(obsListEE);
-                combExperiencia.valueProperty().setValue(eeRecibida);
                 conn.close();
             } catch (SQLException ex) {
                 alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta", Alert.AlertType.ERROR);
