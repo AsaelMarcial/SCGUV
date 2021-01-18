@@ -121,8 +121,6 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
     ObservableList<Academico> coordinadores;
     ObservableList<PlanTrabajoAcademia> planObservable;
     
-    private int idPlanRegistrado;
-    
     Alert alertConexion;
     
     /**
@@ -521,6 +519,9 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
 
     @FXML
     private void clicActualizar(ActionEvent event) {
+        PlanTrabajoAcademia planRecibido = new PlanTrabajoAcademia();
+        planRecibido = planObservable.get(0);
+        int id = planRecibido.getIdPlanTrabajoAcademia();
         String nombre = txfNombrePlan.getText();
         String objetivo = txaObjetivoGeneral.getText();
        
@@ -537,18 +538,16 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
                 int idPeriodo = periodo.getIdPeriodo();
            
                 
-                actualizarPlan(nombre, objetivo, idAcademia, idCoordinador, idPeriodo);
+                actualizarPlan(id, nombre, objetivo, idAcademia, idCoordinador, idPeriodo);
 
-                ObservableList<ActividadPlanTrabajoAcademia> iterarActividades = actividades;
-                for (ActividadPlanTrabajoAcademia actividadIndice : iterarActividades){
+                for (ActividadPlanTrabajoAcademia actividadIndice : actividades){
 
-                    registrarActividades(actividadIndice.getNombre(), actividadIndice.getFecha(), actividadIndice.getOperacion());
+                    actualizarActividades(actividadIndice.getIdActividad(), actividadIndice.getNombre(), actividadIndice.getFecha(), actividadIndice.getOperacion());
                 }
                 
-                ObservableList<TemaPlanTrabajoAcademia> iterarTemas = temas;
-                for (TemaPlanTrabajoAcademia temaIndice : iterarTemas){
+                for (TemaPlanTrabajoAcademia temaIndice : temas){
 
-                    registrarTemas(temaIndice.getNombre(), temaIndice.getParcial(), temaIndice.getIdExperienciaEducativa());
+                    registrarTemas(temaIndice.getIdTema(), temaIndice.getNombre(), temaIndice.getParcial(), temaIndice.getIdExperienciaEducativa());
                 }
                 
                 concluirActualizacion();
@@ -587,11 +586,12 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
         return true;
     }
     
-    private void actualizarPlan(String nombre, String objetivo, int idAcademia, int idPeriodo, int idCoordinador){
+    private void actualizarPlan(int id, String nombre, String objetivo, int idAcademia, int idPeriodo, int idCoordinador){
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if(conn != null){
             try{
-             String consulta = "INSERT INTO planAcademia (nombre, objetivo, idAcademia, idPeriodo, idCoordinador) VALUES (?, ?, ?, ?, ?)";
+             String consulta = "UPDATE planAcademia (nombre, objetivo, idAcademia, idPeriodo, idCoordinador) VALUES (?, ?, ?, ?, ?)"
+                            + "WHERE idPlanAcademia = "+id;
              PreparedStatement ps = conn.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS);
              ps.setString(1, nombre);
              ps.setString(2, objetivo);
@@ -599,20 +599,7 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
              ps.setInt(4, idPeriodo);
              ps.setInt(5, idCoordinador);
              
-             int affectedRows = ps.executeUpdate();
-             if (affectedRows == 0) {
-                throw new SQLException("Creating user failed, no rows affected.");
-             }
-             
-             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                idPlanRegistrado = (int) generatedKeys.getLong(1);
-                }
-                else {
-                    throw new SQLException("Creating user failed, no ID obtained.");
-                }
-             }
-             
+             ps.executeUpdate();
              ps.close();
 
              conn.close();
@@ -627,16 +614,16 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
         
     }
     
-    private void registrarActividades(String nombre, String fecha, String operacion){
+    private void actualizarActividades(int id, String nombre, String fecha, String operacion){
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if(conn != null){
             try{
-             String consulta = "INSERT INTO planAcademiaActividad (nombre, fecha, operacion, idPlanAcademia) VALUES (?, ?, ?, ?)";
+             String consulta = "UPDATE planAcademiaActividad (nombre, fecha, operacion) VALUES (?, ?, ?)"
+                            + "WHERE idActividad = "+id;
              PreparedStatement ps = conn.prepareStatement(consulta);
              ps.setString(1, nombre);
              ps.setString(2, fecha);
              ps.setString(3, operacion);
-             ps.setInt(4, idPlanRegistrado);
              
              ps.executeUpdate();
              ps.close();
@@ -651,16 +638,16 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
         }
     }
     
-    private void registrarTemas(String nombre, int parcial, int idExperienciaEducativa){
+    private void registrarTemas(int id, String nombre, int parcial, int idExperienciaEducativa){
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if(conn != null){
             try{
-             String consulta = "INSERT INTO planAcademiaTema(nombre, parcial, idExperienciaEducativa, idPlanAcademia) VALUES (?, ?, ?, ?)";
+             String consulta = "UPDATE planAcademiaTema(nombre, parcial, idExperienciaEducativa) VALUES (?, ?, ?)"
+                            + "WHERE id = "+id;
              PreparedStatement ps = conn.prepareStatement(consulta);
              ps.setString(1, nombre);
              ps.setInt(2, parcial);
              ps.setInt(3, idExperienciaEducativa);
-             ps.setInt(4, idPlanRegistrado);
              
              ps.executeUpdate();
              ps.close();
