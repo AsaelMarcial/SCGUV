@@ -49,7 +49,7 @@
       <Label layoutX="225.0" layoutY="363.0" text="Parcial:" />
       <Label layoutX="411.0" layoutY="363.0" text="Tema:" />
       <TextField fx:id="txfTema" layoutX="411.0" layoutY="380.0" onKeyTyped="#activarBotonTema" prefHeight="25.0" prefWidth="201.0" style="-fx-background-color: #E9EBEE;" />
-      <Button fx:id="btnActualizar" layoutX="310.0" layoutY="591.0" mnemonicParsing="false" onAction="#clicActualizar" prefHeight="35.0" prefWidth="91.0" style="-fx-background-color: #27B232;" text="Registrar" textFill="WHITE" />
+      <Button fx:id="btnActualizar" layoutX="310.0" layoutY="591.0" mnemonicParsing="false" onAction="#clicActualizar" prefHeight="35.0" prefWidth="91.0" style="-fx-background-color: #27B232;" text="Actualizar" textFill="WHITE" />
       <Button fx:id="btnAgregarTema" disable="true" layoutX="601.0" layoutY="434.0" mnemonicParsing="false" onAction="#clicAgregarTema" prefHeight="25.0" prefWidth="59.0" style="-fx-background-color: #5ADE65;" text="Agregar" />
       <Button fx:id="btnEliminarTema" disable="true" layoutX="601.0" layoutY="467.0" mnemonicParsing="false" onAction="#clicEliminarTema" style="-fx-background-color: #F16D55;" text="Eliminar" />
       <Label layoutX="37.0" layoutY="184.0" text="Actividades:" />

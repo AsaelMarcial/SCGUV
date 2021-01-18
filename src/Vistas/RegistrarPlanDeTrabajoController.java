@@ -247,7 +247,7 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
              ResultSet rs = ps.executeQuery();
              while(rs.next()){
                  ExperienciaEducativa e = new ExperienciaEducativa();
-                 e.setIdExperienciaEduactiva(rs.getInt("idExperienciaEducativa"));
+                 e.setIdExperienciaEducativa(rs.getInt("idExperienciaEducativa"));
                  e.setNombreExperienciaEducativa(rs.getString("nombre"));
                  e.setNrcExperienciaEducativa(rs.getString("nrc"));
                  e.setIdAcademia(idAcademia);

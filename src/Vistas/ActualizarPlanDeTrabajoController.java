@@ -120,6 +120,7 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
     
     ObservableList<Academico> coordinadores;
     ObservableList<PlanTrabajoAcademia> planObservable;
+    private int idPlanRegistrado;
     
     Alert alertConexion;
     
@@ -293,7 +294,7 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
              ResultSet rs = ps.executeQuery();
              while(rs.next()){
                  ExperienciaEducativa e = new ExperienciaEducativa();
-                 e.setIdExperienciaEduactiva(rs.getInt("idExperienciaEducativa"));
+                 e.setIdExperienciaEducativa(rs.getInt("idExperienciaEducativa"));
                  e.setNombreExperienciaEducativa(rs.getString("nombre"));
                  e.setNrcExperienciaEducativa(rs.getString("nrc"));
                  e.setIdAcademia(idAcademia);
@@ -522,6 +523,7 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
         PlanTrabajoAcademia planRecibido = new PlanTrabajoAcademia();
         planRecibido = planObservable.get(0);
         int id = planRecibido.getIdPlanTrabajoAcademia();
+        idPlanRegistrado = id;
         String nombre = txfNombrePlan.getText();
         String objetivo = txaObjetivoGeneral.getText();
        
@@ -536,18 +538,18 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
                 Periodo periodo = new Periodo();
                 periodo = cmbPeriodo.getSelectionModel().getSelectedItem();
                 int idPeriodo = periodo.getIdPeriodo();
-           
+                
                 
                 actualizarPlan(id, nombre, objetivo, idAcademia, idCoordinador, idPeriodo);
-
+                eliminarActividades();
                 for (ActividadPlanTrabajoAcademia actividadIndice : actividades){
 
-                    actualizarActividades(actividadIndice.getIdActividad(), actividadIndice.getNombre(), actividadIndice.getFecha(), actividadIndice.getOperacion());
+                    registrarActividades(actividadIndice.getNombre(), actividadIndice.getFecha(), actividadIndice.getOperacion());
                 }
-                
+                eliminarTemas();
                 for (TemaPlanTrabajoAcademia temaIndice : temas){
 
-                    registrarTemas(temaIndice.getIdTema(), temaIndice.getNombre(), temaIndice.getParcial(), temaIndice.getIdExperienciaEducativa());
+                    registrarTemas(temaIndice.getNombre(), temaIndice.getParcial(), temaIndice.getIdExperienciaEducativa());
                 }
                 
                 concluirActualizacion();
@@ -601,10 +603,9 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
              
              ps.executeUpdate();
              ps.close();
-
              conn.close();
             }catch(SQLException ex){
-                alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta actualizarPlan", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
                 alertConexion.showAndWait();   
             }
         }else{
@@ -613,23 +614,40 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
         }
         
     }
-    
-    private void actualizarActividades(int id, String nombre, String fecha, String operacion){
+    private void eliminarActividades(){
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if(conn != null){
             try{
-             String consulta = "UPDATE planAcademiaActividad (nombre, fecha, operacion) VALUES (?, ?, ?)"
-                            + "WHERE idActividad = "+id;
+             String consulta = "DELETE FROM planAcademiaActividad WHERE idPlanAcademia = "+idPlanRegistrado;
+             PreparedStatement ps = conn.prepareStatement(consulta);
+             ps.executeUpdate();
+             ps.close();
+             conn.close();
+            }catch(SQLException ex){
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta eliminarActividades", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion.showAndWait();   
+            }
+        }else{
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+    }
+    private void registrarActividades(String nombre, String fecha, String operacion){
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        if(conn != null){
+            try{
+             String consulta = "INSERT INTO planAcademiaActividad (nombre, fecha, operacion, idPlanAcademia) VALUES (?, ?, ?, ?)";
              PreparedStatement ps = conn.prepareStatement(consulta);
              ps.setString(1, nombre);
              ps.setString(2, fecha);
              ps.setString(3, operacion);
+             ps.setInt(4, idPlanRegistrado);
              
              ps.executeUpdate();
              ps.close();
              conn.close();
             }catch(SQLException ex){
-                alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta registrarActividades", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
                 alertConexion.showAndWait();   
             }
         }else{
@@ -638,22 +656,40 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
         }
     }
     
-    private void registrarTemas(int id, String nombre, int parcial, int idExperienciaEducativa){
+    private void eliminarTemas(){
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if(conn != null){
             try{
-             String consulta = "UPDATE planAcademiaTema(nombre, parcial, idExperienciaEducativa) VALUES (?, ?, ?)"
-                            + "WHERE id = "+id;
+             String consulta = "DELETE FROM planAcademiaTema WHERE idPlanAcademia = "+idPlanRegistrado;
+             PreparedStatement ps = conn.prepareStatement(consulta);
+             ps.executeUpdate();
+             ps.close();
+             conn.close();
+            }catch(SQLException ex){
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta eliminarTemas", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion.showAndWait();   
+            }
+        }else{
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+    }
+    private void registrarTemas(String nombre, int parcial, int idExperienciaEducativa){
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        if(conn != null){
+            try{
+             String consulta = "INSERT INTO planAcademiaTema(nombre, parcial, idExperienciaEducativa, idPlanAcademia) VALUES (?, ?, ?, ?)";
              PreparedStatement ps = conn.prepareStatement(consulta);
              ps.setString(1, nombre);
              ps.setInt(2, parcial);
              ps.setInt(3, idExperienciaEducativa);
+             ps.setInt(4, idPlanRegistrado);
              
              ps.executeUpdate();
              ps.close();
              conn.close();
             }catch(SQLException ex){
-                alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta registrarTemas", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
                 alertConexion.showAndWait();   
             }
         }else{

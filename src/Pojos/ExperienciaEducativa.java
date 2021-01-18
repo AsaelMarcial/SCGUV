@@ -21,7 +21,7 @@ public class ExperienciaEducativa {
         return idExperienciaEduactiva;
     }
 
-    public void setIdExperienciaEduactiva(int idExperienciaEduactiva) {
+    public void setIdExperienciaEducativa(int idExperienciaEduactiva) {
         this.idExperienciaEduactiva = idExperienciaEduactiva;
     }
 
