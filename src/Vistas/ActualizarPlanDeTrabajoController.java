@@ -37,6 +37,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
@@ -132,6 +133,17 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
         coordinadores = FXCollections.observableArrayList();
         experienciasEducativas = FXCollections.observableArrayList();
         
+        actividades = FXCollections.observableArrayList();
+        this.tbcActividadesActividad.setCellValueFactory(new PropertyValueFactory("nombre"));
+        this.tbcActividadesFecha.setCellValueFactory(new PropertyValueFactory("fecha"));
+        this.tbcActividadesOperacion.setCellValueFactory(new PropertyValueFactory("operacion"));
+        
+        temas = FXCollections.observableArrayList();
+        this.tbcTemasTema.setCellValueFactory(new PropertyValueFactory("nombre"));
+        this.tbcTemasParcial.setCellValueFactory(new PropertyValueFactory("parcial"));
+        this.tbcTemasExperienciaEducativa.setCellValueFactory(new PropertyValueFactory("nombreExperienciaEducativa"));
+        
+        
         cmbAcademia.valueProperty().addListener(new ChangeListener<Academia>(){
             @Override
             public void changed(ObservableValue<? extends Academia> observable, Academia oldValue, Academia newValue) {
@@ -156,10 +168,14 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
     
     public void pasarPlan(PlanTrabajoAcademia planRecibido){
         planObservable.add(0, planRecibido);
+        txfNombrePlan.setText(planRecibido.getNombre());
+        txaObjetivoGeneral.setText(planRecibido.getObjetivo());
         cargarComboBoxPeriodo();
         cargarComboBoxAcademia();
         cargarComboBoxExperienciaEducativa(-1);
         cargarCoordinador(-1);
+        cargarActividades();
+        cargarTemas();
         
     }
     
@@ -319,14 +335,68 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
         }
     }
    
-   private void mostrarPlanDeCurso(){
-       PlanTrabajoAcademia p = new PlanTrabajoAcademia();
-       p = planObservable.get(0);
-       txfNombrePlan.setText(p.getNombre());
-       txaObjetivoGeneral.setText(p.getObjetivo());
-   }
-    
-
+   private void cargarActividades(){
+        PlanTrabajoAcademia planRecibido = new PlanTrabajoAcademia();
+        planRecibido = planObservable.get(0);
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        if(conn != null){
+            try{
+             String consulta = "SELECT * FROM planAcademiaActividad WHERE idPlanAcademia = "+planRecibido.getIdPlanTrabajoAcademia();
+             PreparedStatement ps = conn.prepareStatement(consulta);
+             ResultSet rs = ps.executeQuery();
+             while(rs.next()){
+                ActividadPlanTrabajoAcademia a = new ActividadPlanTrabajoAcademia();
+                a.setNombre(rs.getString("nombre"));
+                a.setFecha(rs.getString("fecha"));
+                a.setOperacion(rs.getString("operacion"));
+                actividades.add(a);
+             }
+             tablevActividades.setItems(actividades);
+             conn.close();
+             
+            }catch(SQLException ex){
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta", Alert.AlertType.ERROR);
+                alertConexion.showAndWait();
+            } 
+        }else{
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+    }
+ 
+   private void cargarTemas(){
+        PlanTrabajoAcademia planRecibido = new PlanTrabajoAcademia();
+        planRecibido = planObservable.get(0);
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        if(conn != null){
+            try{
+             String consulta = "SELECT planAcademiaTema.nombre, parcial, experienciaEducativa.nombre "
+                     + "FROM planAcademiaTema "
+                     + "INNER JOIN experienciaEducativa "
+                     + "ON planAcademiaTema.idExperienciaEducativa = experienciaEducativa.idExperienciaEducativa "
+                     + "WHERE idPlanAcademia = "+planRecibido.getIdPlanTrabajoAcademia();
+             PreparedStatement ps = conn.prepareStatement(consulta);
+             ResultSet rs = ps.executeQuery();
+             while(rs.next()){
+                TemaPlanTrabajoAcademia t = new TemaPlanTrabajoAcademia();
+                t.setNombre(rs.getString("planAcademiaTema.nombre"));
+                t.setParcial(rs.getInt("parcial"));
+                t.setNombreExperienciaEducativa(rs.getString("experienciaEducativa.nombre"));
+                temas.add(t);
+             }
+             tablevTemas.setItems(temas);
+             conn.close();
+             
+            }catch(SQLException ex){
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta", Alert.AlertType.ERROR);
+                alertConexion.showAndWait();
+            } 
+        }else{
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+    }
+   
     @FXML
     private void clicAgregarActividad(ActionEvent event) {
     }
