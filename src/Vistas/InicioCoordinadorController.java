@@ -66,4 +66,5 @@ public class InicioCoordinadorController implements Initializable {
             System.out.println("Error al cargar FXML"+ex.getMessage());
         }
     }
+
 }
