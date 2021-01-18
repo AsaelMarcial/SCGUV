@@ -332,7 +332,7 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
                     else
                         tema.setParcial(2);
                     tema.setNombre(nombre);
-                    tema.setIdExperienciaEducativa(ee.getIdExperienciaEduactiva());
+                    tema.setIdExperienciaEducativa(ee.getIdExperienciaEducativa());
                     tema.setNombreExperienciaEducativa(ee.getNombreExperienciaEducativa());
                     temas.add(tema);
                     tablevTemas.setItems(temas);
@@ -379,7 +379,7 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
                 int idPeriodo = periodo.getIdPeriodo();
            
                 
-                registrarPlan(nombre, objetivo, idAcademia, idCoordinador, idPeriodo);
+                registrarPlan(nombre, objetivo, idAcademia, idPeriodo, idCoordinador);
 
                 ObservableList<ActividadPlanTrabajoAcademia> iterarActividades = actividades;
                 for (ActividadPlanTrabajoAcademia actividadIndice : iterarActividades){

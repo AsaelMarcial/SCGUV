@@ -172,7 +172,7 @@ public class VisualizarPlanDeTrabajoController implements Initializable {
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if(conn != null){
             try{
-             String consulta = "SELECT planAcademiaTema.nombre, parcial, experienciaEducativa.nombre "
+             String consulta = "SELECT planAcademiaTema.nombre, parcial, experienciaEducativa.nombre, idExperienciaEducativa "
                      + "FROM planAcademiaTema "
                      + "INNER JOIN experienciaEducativa "
                      + "ON planAcademiaTema.idExperienciaEducativa = experienciaEducativa.idExperienciaEducativa "

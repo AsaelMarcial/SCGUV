@@ -94,6 +94,7 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
     @FXML
     private TableView<TemaPlanTrabajoAcademia> tablevTemas;
     ObservableList<TemaPlanTrabajoAcademia> temas;
+    ObservableList<TemaPlanTrabajoAcademia> idTemas;
     
     @FXML
     private TableColumn tbcTemasExperienciaEducativa;
@@ -150,10 +151,12 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
         this.tbcActividadesFecha.setCellValueFactory(new PropertyValueFactory("fecha"));
         this.tbcActividadesOperacion.setCellValueFactory(new PropertyValueFactory("operacion"));
         
+        idTemas = FXCollections.observableArrayList();
         temas = FXCollections.observableArrayList();
         this.tbcTemasTema.setCellValueFactory(new PropertyValueFactory("nombre"));
         this.tbcTemasParcial.setCellValueFactory(new PropertyValueFactory("parcial"));
         this.tbcTemasExperienciaEducativa.setCellValueFactory(new PropertyValueFactory("nombreExperienciaEducativa"));
+        
         
         parciales.add("Primer parcial");
         parciales.add("Segundo parcial");
@@ -262,6 +265,7 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
                  if(rs.getInt("idAcademia") == idAcademiaPlanRecibido){
                      academiaRecibida.setIdAcademia(idAcademiaPlanRecibido);
                      academiaRecibida.setNombre(rs.getString("nombre"));
+                     academiaRecibida.setIdCoordinador(planRecibido.getIdCoordinador());
                  }
              }
              
@@ -386,29 +390,33 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if(conn != null){
             try{
-             String consulta = "SELECT planAcademiaTema.nombre, parcial, experienciaEducativa.nombre "
-                     + "FROM planAcademiaTema "
+             String consulta = "SELECT * FROM planAcademiaTema "
                      + "INNER JOIN experienciaEducativa "
                      + "ON planAcademiaTema.idExperienciaEducativa = experienciaEducativa.idExperienciaEducativa "
                      + "WHERE idPlanAcademia = "+planRecibido.getIdPlanTrabajoAcademia();
              PreparedStatement ps = conn.prepareStatement(consulta);
              ResultSet rs = ps.executeQuery();
+
              while(rs.next()){
                 TemaPlanTrabajoAcademia t = new TemaPlanTrabajoAcademia();
+                
                 t.setNombre(rs.getString("planAcademiaTema.nombre"));
                 t.setParcial(rs.getInt("parcial"));
                 t.setNombreExperienciaEducativa(rs.getString("experienciaEducativa.nombre"));
+                t.setIdExperienciaEducativa(rs.getInt("idExperienciaEducativa"));
+                
+                
                 temas.add(t);
              }
              tablevTemas.setItems(temas);
              conn.close();
              
             }catch(SQLException ex){
-                alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta", Alert.AlertType.ERROR);
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta cargarTemas", "La consulta a la base de datos no es correcta", Alert.AlertType.ERROR);
                 alertConexion.showAndWait();
             } 
         }else{
-            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion cargarTemas", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
             alertConexion.showAndWait();
         }
     }
@@ -454,7 +462,7 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
                     else
                         tema.setParcial(2);
                     tema.setNombre(nombre);
-                    tema.setIdExperienciaEducativa(ee.getIdExperienciaEduactiva());
+                    tema.setIdExperienciaEducativa(ee.getIdExperienciaEducativa());
                     tema.setNombreExperienciaEducativa(ee.getNombreExperienciaEducativa());
                     temas.add(tema);
                     tablevTemas.setItems(temas);
@@ -537,6 +545,7 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
                Academia academia = new Academia();
                 academia = cmbAcademia.getSelectionModel().getSelectedItem();
                 int idAcademia = academia.getIdAcademia();
+                
                 int idCoordinador = academia.getIdCoordinador();
            
                 Periodo periodo = new Periodo();
@@ -544,15 +553,15 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
                 int idPeriodo = periodo.getIdPeriodo();
                 
                 
-                actualizarPlan(id, nombre, objetivo, idAcademia, idCoordinador, idPeriodo);
+                actualizarPlan(id, nombre, objetivo, idAcademia, idPeriodo, idCoordinador);
                 eliminarActividades();
                 for (ActividadPlanTrabajoAcademia actividadIndice : actividades){
-
                     registrarActividades(actividadIndice.getNombre(), actividadIndice.getFecha(), actividadIndice.getOperacion());
                 }
+                
                 eliminarTemas();
-                for (TemaPlanTrabajoAcademia temaIndice : temas){
-
+                for (TemaPlanTrabajoAcademia temaIndice : temas ){
+                    
                     registrarTemas(temaIndice.getNombre(), temaIndice.getParcial(), temaIndice.getIdExperienciaEducativa());
                 }
                 
@@ -597,7 +606,7 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
         if(conn != null){
             try{
              String consulta = "UPDATE planAcademia SET nombre=?, objetivo=?, idAcademia=?, idPeriodo=?, idCoordinador=? WHERE idPlanAcademia = "+id;
-             PreparedStatement ps = conn.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS);
+             PreparedStatement ps = conn.prepareStatement(consulta);
              ps.setString(1, nombre);
              ps.setString(2, objetivo);
              ps.setInt(3, idAcademia);
@@ -608,7 +617,7 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
              ps.close();
              conn.close();
             }catch(SQLException ex){
-                alertConexion = Herramientas.constructorDeAlertas("Error de consulta actualizarPlan", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta actualizarPlan: ", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
                 alertConexion.showAndWait();   
             }
         }else{
