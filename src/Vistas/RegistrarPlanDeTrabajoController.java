@@ -307,6 +307,8 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
                 actividades.add(actividad);
                 tablevActividades.setItems(actividades);
                 btnAgregarActividad.setDisable(true);
+                txfActividad.setText("");
+                txfOperacion.setText("");
                 return;
             }
         }
@@ -337,6 +339,7 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
                     temas.add(tema);
                     tablevTemas.setItems(temas);
                     btnAgregarTema.setDisable(true);
+                    txfTema.setText("");
                     return;
                 }
                 
@@ -352,6 +355,8 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
         actividades.remove(tablevActividades.getSelectionModel().getSelectedItem());
         tablevActividades.setItems(actividades);
         btnEliminarTema.setDisable(true);
+        txfActividad.setText("");
+        txfOperacion.setText("");
     }
 
     @FXML
@@ -359,6 +364,7 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
         temas.remove(tablevTemas.getSelectionModel().getSelectedItem());
         tablevTemas.setItems(temas);
         btnEliminarTema.setDisable(true);
+        txfTema.setText("");
     }
 
     @FXML

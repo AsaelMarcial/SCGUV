@@ -307,10 +307,7 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
                  e.setNrcExperienciaEducativa(rs.getString("nrc"));
                  e.setIdAcademia(idAcademia);
                  experienciasEducativas.add(e);
-                 
-                
-                 
-                 
+  
              }
              cmbExperienciaEducativa.setItems(experienciasEducativas);
              conn.close();
@@ -439,6 +436,8 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
                 actividades.add(actividad);
                 tablevActividades.setItems(actividades);
                 btnAgregarActividad.setDisable(true);
+                txfActividad.setText("");
+                txfOperacion.setText("");
                 return;
             }
         }
@@ -467,6 +466,7 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
                     temas.add(tema);
                     tablevTemas.setItems(temas);
                     btnAgregarTema.setDisable(true);
+                    txfTema.setText("");
                     return;
                 }
                 
@@ -482,6 +482,8 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
         actividades.remove(tablevActividades.getSelectionModel().getSelectedItem());
         tablevActividades.setItems(actividades);
         btnEliminarTema.setDisable(true);
+        txfActividad.setText("");
+        txfOperacion.setText("");
     }
 
     @FXML
@@ -489,6 +491,7 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
         temas.remove(tablevTemas.getSelectionModel().getSelectedItem());
         tablevTemas.setItems(temas);
         btnEliminarTema.setDisable(true);
+        txfTema.setText("");
     }
 
     @FXML
