@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,10 +51,10 @@ public class RegistrarAcademicoController implements Initializable {
 
     @FXML
     private ComboBox<Academia> cbAcademia;
-    
     private int idAcademicoRegistrado;
     
     private ObservableList<Academia> academias;
+            Alert alertConexion;
     /**
      * Initializes the controller class.
      */
@@ -66,7 +67,6 @@ public class RegistrarAcademicoController implements Initializable {
     
     private void CargaListaDeAcademias(){
         Connection conn = ConexionBD.iniciarConexionMySQL();
-        Alert alertConexion;
         if(conn != null){
             try{
              String consulta = "SELECT * FROM academia";
@@ -94,55 +94,53 @@ public class RegistrarAcademicoController implements Initializable {
 
     @FXML
     private void clickGuardarAcademico(ActionEvent event) {
-        boolean isValido = true;
         
         String nombreAcademicoAux = txtNombreAcademico.getText();
-        
         String numeroPersonalAux = txtNumeroPersonal.getText();
-        
         String correoAux = txtCorreoAcademico.getText();
         
-        int posAcademia = cbAcademia.getSelectionModel().getSelectedIndex();
-        
-        if(nombreAcademicoAux.isEmpty()){
-            isValido = false;
-        }
-        
-        if(numeroPersonalAux.isEmpty()){
-            isValido = false;
-        }
-        
-        if(correoAux.isEmpty()){
-            isValido = false;
-        }
-        
-        if(posAcademia < 0){
-            isValido = false;
-        }
-        
-        if(isValido){
-            guardaAcademico(nombreAcademicoAux, numeroPersonalAux, correoAux, academias.get(posAcademia).getIdAcademia());
+        Academia aca = new Academia();
+        aca = cbAcademia.getSelectionModel().getSelectedItem();
+        int idAcademia = aca.getIdAcademia();
+
+        if(validarCampos(nombreAcademicoAux, numeroPersonalAux, correoAux) && aca != null){
+            guardaAcademico(nombreAcademicoAux, numeroPersonalAux, correoAux);
+            guardaAcademiaAcademico(idAcademia);
+            
         } else{
             Alert alertConexion = Herramientas.constructorDeAlertas("Campos obligatorios", "Por favor llene los campos para continuar", Alert.AlertType.ERROR);
             alertConexion.showAndWait();
         }
     }
     
-    private void guardaAcademico(String nombreAcademico, String numeroPersonal, String correoElectronico, int idAcademia){
+    private boolean validarCampos(String nombreAcademicoAux, String numeroPersonalAux, String correoAux){
+        if(nombreAcademicoAux.isEmpty()){
+            return false;
+        }
+        
+        if(numeroPersonalAux.isEmpty()){
+            return false;
+        }
+        
+        if(correoAux.isEmpty()){
+            return false;
+        }
+       
+        return true;
+    }
+    
+    private void guardaAcademico(String nombreAcademico, String numeroPersonal, String correoElectronico){
         
         Connection conn = ConexionBD.iniciarConexionMySQL();
-        Alert alertConexion;
         
         if(conn != null){
             try{
              String consulta = "INSERT INTO academico (nombre, numeroPersonal, correo) VALUES (?, ?, ?)";
-             PreparedStatement ps = conn.prepareStatement(consulta);
+             PreparedStatement ps = conn.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS);
+             
              ps.setString(1, nombreAcademico);
              ps.setString(2, numeroPersonal);
              ps.setString(3, correoElectronico);
-             int resultado = ps.executeUpdate();
-             
-             if(resultado > 0){
                  
                 int affectedRows = ps.executeUpdate();
                 if (affectedRows == 0) {
@@ -152,35 +150,16 @@ public class RegistrarAcademicoController implements Initializable {
                 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         idAcademicoRegistrado = (int) generatedKeys.getLong(1);
-                        guardaAcademiaAcademico(idAcademicoRegistrado, idAcademia);
                     }
                     else {
                         throw new SQLException("Creating user failed, no ID obtained.");
                     }
                 }
-             
-             ps.close();
-                 
-                alertConexion = Herramientas.constructorDeAlertas("Registrado", "Academico registrado con éxito", Alert.AlertType.INFORMATION);
-                alertConexion.showAndWait();
-                
-                Stage stage = (Stage) txtNombreAcademico.getScene().getWindow();
-                stage.close();
-                
-             }else{
-                alertConexion = Herramientas.constructorDeAlertas("Error en el registro", "El academico no pudo ser guardado en el sistema", Alert.AlertType.ERROR);
-                alertConexion.showAndWait();
-             }
-             
+                ps.close();
+
             }catch(SQLException ex){
                 alertConexion = Herramientas.constructorDeAlertas("Error de consulta", ex.getMessage(), Alert.AlertType.ERROR);
-                alertConexion.showAndWait();   
-            }finally{
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
+                alertConexion.showAndWait();
             }
         }else{
             alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
@@ -189,27 +168,25 @@ public class RegistrarAcademicoController implements Initializable {
         
     }
     
-    private void guardaAcademiaAcademico(int idAcademico, int idAcademia){
+    private void guardaAcademiaAcademico(int idAcademia){
         Connection conn = ConexionBD.iniciarConexionMySQL();
-        Alert alertConexion;
+
         
         if(conn != null){
             try{
-             String consulta = "INSERT INTO academiaAcademico (idAcademia, idAcademico, idAcademia) VALUES (?, ?)";
+             String consulta = "INSERT INTO academiaAcademico (idAcademia, idAcademico) VALUES (?, ?)";
              PreparedStatement ps = conn.prepareStatement(consulta);
              ps.setInt(1, idAcademia);
-             ps.setInt(2, idAcademico);
-             int resultado = ps.executeUpdate();
-             
-             if(resultado > 0){
-                alertConexion = Herramientas.constructorDeAlertas("Registrado", "", Alert.AlertType.INFORMATION);
-                alertConexion.showAndWait();
+             ps.setInt(2, idAcademicoRegistrado);
+             ps.executeUpdate();
+
+            System.out.println("AcademiaAcademico");
+            alertConexion = Herramientas.constructorDeAlertas("Registrado", "Academico registrado con éxito", Alert.AlertType.INFORMATION);
+            alertConexion.showAndWait();
                 
-             }else{
-                alertConexion = Herramientas.constructorDeAlertas("Error en el registro", "", Alert.AlertType.ERROR);
-                alertConexion.showAndWait();
-             }
-             
+            Stage stage = (Stage) txtNombreAcademico.getScene().getWindow();
+            stage.close();
+            conn.close();
             }catch(SQLException ex){
                 alertConexion = Herramientas.constructorDeAlertas("Error de consulta", ex.getMessage(), Alert.AlertType.ERROR);
                 alertConexion.showAndWait();   
@@ -219,4 +196,5 @@ public class RegistrarAcademicoController implements Initializable {
             alertConexion.showAndWait();
         }
     }
+
 }
