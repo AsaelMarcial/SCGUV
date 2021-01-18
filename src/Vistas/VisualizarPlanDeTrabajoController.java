@@ -112,7 +112,6 @@ public class VisualizarPlanDeTrabajoController implements Initializable {
         cargarDato("SELECT nombre FROM academico WHERE idAcademico = "+p.getIdCoordinador(), txfCoordinador, "nombre");
         cargarActividades();
         cargarTemas();
-        
     }
     
     
@@ -172,8 +171,7 @@ public class VisualizarPlanDeTrabajoController implements Initializable {
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if(conn != null){
             try{
-             String consulta = "SELECT planAcademiaTema.nombre, parcial, experienciaEducativa.nombre "
-                     + "FROM planAcademiaTema "
+             String consulta = "SELECT * FROM planAcademiaTema "
                      + "INNER JOIN experienciaEducativa "
                      + "ON planAcademiaTema.idExperienciaEducativa = experienciaEducativa.idExperienciaEducativa "
                      + "WHERE idPlanAcademia = "+p.getIdPlanTrabajoAcademia();

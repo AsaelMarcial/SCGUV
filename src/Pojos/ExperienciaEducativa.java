@@ -7,6 +7,11 @@ public class ExperienciaEducativa {
     private String nrcExperienciaEducativa;
     private int idAcademia;
 
+
+    public ExperienciaEducativa() {
+    }
+
+
     public ExperienciaEducativa(int idExperienciaEducativa, String nombreExperienciaEducativa, String nrcExperienciaEducativa, int idAcademia) {
         this.idExperienciaEducativa = idExperienciaEducativa;
         this.nombreExperienciaEducativa = nombreExperienciaEducativa;
@@ -14,8 +19,10 @@ public class ExperienciaEducativa {
         this.idAcademia = idAcademia;
     }
 
-    public ExperienciaEducativa() {
+    public int getIdExperienciaEducativa() {
+        return idExperienciaEducativa;
     }
+
 
     public int getIdExperienciaEducativa() {
         return idExperienciaEducativa;
@@ -48,6 +55,9 @@ public class ExperienciaEducativa {
     public void setIdAcademia(int idAcademia) {
         this.idAcademia = idAcademia;
     }
+
+    
+    
 
     @Override
     public String toString() {
