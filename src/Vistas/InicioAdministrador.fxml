@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="410.0" prefWidth="395.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vistas.InicioCoordinadorController">
+<AnchorPane id="AnchorPane" prefHeight="410.0" prefWidth="395.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vistas.InicioAdministradorController">
    <children>
       <Button fx:id="btnVerAcademias" defaultButton="true" layoutX="78.0" layoutY="108.0" mnemonicParsing="false" onAction="#clicVerAcademias" prefHeight="46.0" prefWidth="240.0" style="-fx-background-color: #3369CD;" text="Ver academias" textAlignment="CENTER" textFill="WHITE">
          <font>
