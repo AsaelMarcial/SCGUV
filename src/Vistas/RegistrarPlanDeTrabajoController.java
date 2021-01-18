@@ -114,7 +114,7 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
     
     Alert alertConexion;
     @FXML
-    private Button btnActualizar;
+    private Button btnRegistrar;
     
 
     
@@ -126,8 +126,8 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
             super.updateItem(date, empty);
             LocalDate hoy = LocalDate.now();
             setDisable(empty || date.compareTo(hoy) < 0 );
-        }
-    });
+            }
+        });
         datepFecha.setEditable(false);
         
         
@@ -361,6 +361,7 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
         btnEliminarTema.setDisable(true);
     }
 
+    @FXML
     private void clicRegistrar(ActionEvent event) {
         String nombre = txfNombrePlan.getText();
         String objetivo = txaObjetivoGeneral.getText();
@@ -568,8 +569,5 @@ public class RegistrarPlanDeTrabajoController implements Initializable {
         btnAgregarTema.setDisable(false);
     }
 
-    @FXML
-    private void clicActualizar(ActionEvent event) {
-    }
     
 }
