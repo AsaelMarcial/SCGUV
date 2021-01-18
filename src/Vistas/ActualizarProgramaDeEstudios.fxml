@@ -8,9 +8,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="915.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vistas.RegistrarProgramaDeEstudiosController">
+<AnchorPane id="AnchorPane" prefHeight="915.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vistas.ActualizarProgramaDeEstudiosController">
    <children>
-      <Label layoutX="170.0" layoutY="14.0" text="Registrar Programa de experiencia educativa">
+      <Label layoutX="170.0" layoutY="14.0" text="Actualizar Programa de experiencia educativa">
          <font>
             <Font size="16.0" />
          </font>
@@ -28,15 +28,15 @@
       <TextField fx:id="txtOportunidades" layoutX="190.0" layoutY="208.0" prefHeight="25.0" prefWidth="357.0" />
       <TextField fx:id="txtCreditos" layoutX="461.0" layoutY="159.0" prefHeight="25.0" prefWidth="84.0" />
       <Label layoutX="458.0" layoutY="142.0" text="Creditos" />
-      <Label layoutX="66.0" layoutY="240.0" text="Fecha de elaboración" />
-      <Label layoutX="249.0" layoutY="240.0" text="Fecha de modificación" />
+      <Label layoutX="56.0" layoutY="240.0" text="Fecha de modificación" />
+      <Label layoutX="227.0" layoutY="240.0" text="Fecha de aprobación" />
       <Label layoutX="61.0" layoutY="295.0" text="Saberes teoricos" />
       <TextArea fx:id="txtTeoricos" layoutX="55.0" layoutY="312.0" prefHeight="69.0" prefWidth="156.0" />
       <Text layoutX="240.0" layoutY="308.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Saberes heuristicos" />
       <TextArea fx:id="txtHeuristicos" layoutX="231.0" layoutY="312.0" prefHeight="69.0" prefWidth="156.0" />
       <TextArea fx:id="txtAxiologicos" layoutX="402.0" layoutY="312.0" prefHeight="69.0" prefWidth="149.0" />
       <Text layoutX="406.0" layoutY="308.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Saberes axiologicos" />
-      <TableView fx:id="tablevBibliografia" layoutX="65.0" layoutY="494.0" prefHeight="115.0" prefWidth="492.0">
+      <TableView fx:id="tablevBibliografia" layoutX="65.0" layoutY="494.0" onMouseClicked="#clicElementoBibliografia" prefHeight="115.0" prefWidth="492.0">
         <columns>
           <TableColumn fx:id="tbcAutor" prefWidth="122.0" text="Autor" />
           <TableColumn fx:id="tbcTitulo" prefWidth="128.0" text="Titulo" />
@@ -52,7 +52,7 @@
          <font>
             <Font size="13.0" />
          </font></Label>
-      <TableView fx:id="tablevEvaluacion" layoutX="63.0" layoutY="735.0" prefHeight="130.0" prefWidth="492.0">
+      <TableView fx:id="tablevEvaluacion" layoutX="63.0" layoutY="735.0" onMouseClicked="#clicElementoEval" prefHeight="130.0" prefWidth="492.0">
         <columns>
           <TableColumn fx:id="tbcEvidencia" prefWidth="102.0" text="Evidencia" />
           <TableColumn fx:id="tbcCriterio" prefWidth="159.0" text="Criterio" />
@@ -71,15 +71,15 @@
       <TextField fx:id="txtAutor" layoutX="63.0" layoutY="429.0" prefHeight="25.0" prefWidth="140.0" />
       <TextField fx:id="txtTitulo" layoutX="215.0" layoutY="429.0" prefHeight="25.0" prefWidth="140.0" />
       <TextField fx:id="txtEditorial" layoutX="365.0" layoutY="429.0" prefHeight="25.0" prefWidth="128.0" />
-      <TextField fx:id="txtAnio" layoutX="508.0" layoutY="429.0" prefHeight="25.0" prefWidth="49.0" />
+      <TextField fx:id="txtAnio" layoutX="508.0" layoutY="429.0" onKeyTyped="#activarBtnBibliografia" prefHeight="25.0" prefWidth="49.0" />
       <Button fx:id="btnAddBibliografia" layoutX="64.0" layoutY="461.0" mnemonicParsing="false" onAction="#clicAddBibliografia" style="-fx-background-color: #5ADE65;" text="Agregar" />
-      <DatePicker fx:id="dateElaboracion" layoutX="63.0" layoutY="257.0" prefHeight="25.0" prefWidth="113.0" />
-      <DatePicker fx:id="dateModificacion" layoutX="252.0" layoutY="257.0" prefHeight="25.0" prefWidth="113.0" />
+      <DatePicker fx:id="dateModificacion" layoutX="59.0" layoutY="257.0" prefHeight="25.0" prefWidth="113.0" />
+      <DatePicker fx:id="dateAprobacion" layoutX="230.0" layoutY="257.0" prefHeight="25.0" prefWidth="113.0" />
       <Separator layoutX="2.0" layoutY="292.0" prefHeight="3.0" prefWidth="617.0" />
       <Separator layoutX="2.0" layoutY="390.0" prefHeight="3.0" prefWidth="617.0" />
       <Separator layoutY="617.0" prefHeight="3.0" prefWidth="617.0" />
       <Button fx:id="btnAddEval" layoutX="66.0" layoutY="699.0" mnemonicParsing="false" onAction="#clicAddEval" style="-fx-background-color: #5ADE65;" text="Agregar" />
-      <TextField fx:id="txtPorcentaje" layoutX="484.0" layoutY="667.0" prefHeight="25.0" prefWidth="68.0" />
+      <TextField fx:id="txtPorcentaje" layoutX="484.0" layoutY="667.0" onKeyTyped="#activarBtnEval" prefHeight="25.0" prefWidth="68.0" />
       <TextField fx:id="txtAmbito" layoutX="349.0" layoutY="667.0" prefHeight="25.0" prefWidth="128.0" />
       <TextField fx:id="txtCriterio" layoutX="217.0" layoutY="667.0" prefHeight="25.0" prefWidth="119.0" />
       <TextField fx:id="txtEvidencia" layoutX="65.0" layoutY="667.0" prefHeight="25.0" prefWidth="140.0" />
@@ -87,7 +87,7 @@
       <Label layoutX="349.0" layoutY="650.0" text="Ambito" />
       <Label layoutX="218.0" layoutY="650.0" text="Criterio" />
       <Label layoutX="63.0" layoutY="650.0" text="Evidencia" />
-      <Button fx:id="btnRegistrar" layoutX="407.0" layoutY="876.0" mnemonicParsing="false" onAction="#clicRegistrar" style="-fx-background-color: #5ADE65;" text="Registrar" textFill="#fffdfd">
+      <Button fx:id="btnActualizar" layoutX="407.0" layoutY="876.0" mnemonicParsing="false" onAction="#clicActualizar" style="-fx-background-color: #5ADE65;" text="Actualizar" textFill="#fffdfd">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>

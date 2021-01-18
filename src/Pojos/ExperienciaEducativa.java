@@ -17,11 +17,11 @@ public class ExperienciaEducativa {
     public ExperienciaEducativa() {
     }
 
-    public int getIdExperienciaEduactiva() {
+    public int getIdExperienciaEducativa() {
         return idExperienciaEduactiva;
     }
 
-    public void setIdExperienciaEduactiva(int idExperienciaEduactiva) {
+    public void setIdExperienciaEducativa(int idExperienciaEduactiva) {
         this.idExperienciaEduactiva = idExperienciaEduactiva;
     }
 

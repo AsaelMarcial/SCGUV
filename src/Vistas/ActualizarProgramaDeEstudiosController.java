@@ -12,6 +12,7 @@ import Pojos.Campus;
 import Pojos.Carrera;
 import Pojos.EvaluacionProgramaEstudio;
 import Pojos.ExperienciaEducativa;
+import Pojos.ProgramaEstudio;
 import Util.Herramientas;
 import static java.lang.Integer.parseInt;
 import java.net.URL;
@@ -19,11 +20,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -39,6 +37,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 /**
@@ -46,11 +46,12 @@ import javafx.stage.Stage;
  *
  * @author asael
  */
-public class RegistrarProgramaDeEstudiosController implements Initializable {
+public class ActualizarProgramaDeEstudiosController implements Initializable {
 
-    private int idProgramaEstudio;
     @FXML
     private TextField txtCodigo;
+    @FXML
+    private TextField txtAcreditacion;
     @FXML
     private TextField txtModalidad;
     @FXML
@@ -86,6 +87,8 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
     @FXML
     private TableColumn tbcPorcentaje;
     @FXML
+    private Button btCancelar;
+    @FXML
     private ComboBox<Academia> combAcademia;
     ObservableList<Academia> obsListAcademia;
     @FXML
@@ -108,9 +111,8 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
     @FXML
     private Button btnAddBibliografia;
     @FXML
-    private DatePicker dateElaboracion;
-    @FXML
     private DatePicker dateModificacion;
+    @FXML
     private DatePicker dateAprobacion;
     @FXML
     private Button btnAddEval;
@@ -122,35 +124,24 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
     private TextField txtCriterio;
     @FXML
     private TextField txtEvidencia;
-
-    public Alert alertConexion;
     @FXML
     private Button btnBorrarBibliografia;
     @FXML
     private Button btnBorrarEval;
     @FXML
-    private Button btnRegistrar;
-    @FXML
-    private TextField txtAcreditacion;
-    @FXML
     private TextArea txtPerfil;
     @FXML
-    private Button btCancelar;
+    private Button btnActualizar;
+    Alert alertConexion;
+    private int idProgramaRegistrado;
+
+    ObservableList<ProgramaEstudio> obsListPrograma;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        dateElaboracion.setDayCellFactory(picker -> new DateCell() {
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                LocalDate hoy = LocalDate.now();
-                setDisable(empty || date.compareTo(hoy) < 0);
-            }
-        });
-        dateElaboracion.setEditable(false);
-
         dateModificacion.setDayCellFactory(picker -> new DateCell() {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
@@ -159,6 +150,15 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
             }
         });
         dateModificacion.setEditable(false);
+
+        dateAprobacion.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate hoy = LocalDate.now();
+                setDisable(empty || date.compareTo(hoy) < 0);
+            }
+        });
+        dateAprobacion.setEditable(false);
 
         obsListAcademia = FXCollections.observableArrayList();
         obsListCarrera = FXCollections.observableArrayList();
@@ -177,14 +177,30 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
         this.tbcAmbito.setCellValueFactory(new PropertyValueFactory("ambito"));
         this.tbcPorcentaje.setCellValueFactory(new PropertyValueFactory("porcentaje"));
 
+    }
+
+    public void pasarPrograma(ProgramaEstudio programa) {
+        obsListPrograma.add(0, programa);
+        txtPerfil.setText(programa.getPerfil());
+        txtCodigo.setText(programa.getCodigo());
+        txtAcreditacion.setText(programa.getAcreditacion());
+        txtCreditos.setText(String.valueOf(programa.getCreditos()));
+        txtModalidad.setText(programa.getModalidad());
+        txtOportunidades.setText(programa.getOportunidades());
         cargarComboBoxAcademia();
         cargarComboBoxCarrera();
         cargarComboBoxCampus();
         cargarComboBoxExperiencia();
+        cargarBibliografia();
+        cargarEvaluacion();
 
     }
 
     private void cargarComboBoxAcademia() {
+        ProgramaEstudio programaRecibido = new ProgramaEstudio();
+        programaRecibido = obsListPrograma.get(0);
+        int idAcademia = programaRecibido.getIdAreaAcademica();
+        Academia academiaRecibida = new Academia();
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if (conn != null) {
             try {
@@ -197,8 +213,14 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
                     a.setNombre(rs.getString("nombre"));
                     a.setIdCoordinador(rs.getInt("idCoordinador"));
                     obsListAcademia.add(a);
+
+                    if (rs.getInt("idAcademia") == idAcademia) {
+                        academiaRecibida.setIdAcademia(idAcademia);
+                        academiaRecibida.setNombre(rs.getString("nombre"));
+                    }
                 }
                 combAcademia.setItems(obsListAcademia);
+                combAcademia.valueProperty().setValue(academiaRecibida);
                 conn.close();
 
             } catch (SQLException ex) {
@@ -212,6 +234,10 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
     }
 
     private void cargarComboBoxCarrera() {
+        ProgramaEstudio programaRecibido = new ProgramaEstudio();
+        programaRecibido = obsListPrograma.get(0);
+        int idCarrera = programaRecibido.getIdCarrera();
+        Carrera carreraRecibida = new Carrera();
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if (conn != null) {
             try {
@@ -224,8 +250,14 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
                     carr.setNombre(rs.getString("nombre"));
                     carr.setIdFacultad(rs.getInt("idFacultad"));
                     obsListCarrera.add(carr);
+                    if (rs.getInt("idCarrera") == idCarrera) {
+                        carreraRecibida.setIdCarrera(idCarrera);
+                        carreraRecibida.setNombre(rs.getString("nombre"));
+                        carreraRecibida.setIdFacultad(rs.getInt("idFacultad"));
+                    }
                 }
                 combCarrera.setItems(obsListCarrera);
+                combCarrera.valueProperty().setValue(carreraRecibida);
                 conn.close();
 
             } catch (SQLException ex) {
@@ -239,6 +271,10 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
     }
 
     private void cargarComboBoxCampus() {
+        ProgramaEstudio programaRecibido = new ProgramaEstudio();
+        programaRecibido = obsListPrograma.get(0);
+        int idCampus = programaRecibido.getIdCampus();
+        Campus campusRecibido = new Campus();
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if (conn != null) {
             try {
@@ -250,8 +286,13 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
                     camp.setIdCampus(rs.getInt("idCampus"));
                     camp.setNombre(rs.getString("nombre"));
                     obsListCampus.add(camp);
+                    if (rs.getInt("idCampus") == idCampus) {
+                        campusRecibido.setIdCampus(idCampus);
+                        campusRecibido.setNombre(rs.getString("nombre"));
+                    }
                 }
                 combCampus.setItems(obsListCampus);
+                combCampus.valueProperty().setValue(campusRecibido);
                 conn.close();
 
             } catch (SQLException ex) {
@@ -265,6 +306,10 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
     }
 
     private void cargarComboBoxExperiencia() {
+        ProgramaEstudio programaRecibido = new ProgramaEstudio();
+        programaRecibido = obsListPrograma.get(0);
+        int idEE = programaRecibido.getIdExperienciaEducativa();
+        ExperienciaEducativa eeRecibida = new ExperienciaEducativa();
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if (conn != null) {
             try {
@@ -278,9 +323,77 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
                     e.setNrcExperienciaEducativa(rs.getString("nrc"));
                     e.setIdAcademia(rs.getInt("idAcademia"));
                     obsListEE.add(e);
+                    if (rs.getInt("idExperienciaEducativa") == idEE) {
+                        eeRecibida.setIdExperienciaEducativa(idEE);
+                        eeRecibida.setNombreExperienciaEducativa("nombre");
+                        eeRecibida.setNrcExperienciaEducativa("nrc");
+                        eeRecibida.setIdAcademia(rs.getInt("idAcademia"));
+                    }
                 }
                 combExperiencia.setItems(obsListEE);
+                combExperiencia.valueProperty().setValue(eeRecibida);
                 conn.close();
+            } catch (SQLException ex) {
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta", Alert.AlertType.ERROR);
+                alertConexion.showAndWait();
+            }
+        } else {
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+    }
+
+
+    private void cargarBibliografia() {
+        ProgramaEstudio programa = new ProgramaEstudio();
+        programa = obsListPrograma.get(0);
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        if (conn != null) {
+            try {
+                String consulta = "SELECT * FROM programaEstudioBibliografia WHERE idProgramaEstudio = " + programa.getIdProgramaEstudio();
+                PreparedStatement ps = conn.prepareStatement(consulta);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    BibliografiaProgramaEstudio bibliografia = new BibliografiaProgramaEstudio();
+                    bibliografia.setAutor(rs.getString("autor"));
+                    bibliografia.setTitulo(rs.getString("titulo"));
+                    bibliografia.setEditorial(rs.getString("editorial"));
+                    bibliografia.setAnio(rs.getInt("anio"));
+                    obsListBibliografia.add(bibliografia);
+                }
+                tablevBibliografia.setItems(obsListBibliografia);
+                conn.close();
+
+            } catch (SQLException ex) {
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta", Alert.AlertType.ERROR);
+                alertConexion.showAndWait();
+            }
+        } else {
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+    }
+
+    private void cargarEvaluacion() {
+        ProgramaEstudio programa = new ProgramaEstudio();
+        programa = obsListPrograma.get(0);
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        if (conn != null) {
+            try {
+                String consulta = "SELECT * FROM programaEstudioEvaluacion WHERE idProgramaEstudio = " + programa.getIdProgramaEstudio();
+                PreparedStatement ps = conn.prepareStatement(consulta);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    EvaluacionProgramaEstudio eval = new EvaluacionProgramaEstudio();
+                    eval.setEvidencia(rs.getString("evidencia"));
+                    eval.setCriterio(rs.getString("criterio"));
+                    eval.setAmbito(rs.getString("ambito"));
+                    eval.setPorcentaje(rs.getInt("porcentaje"));
+                    obsListEval.add(eval);
+                }
+                tablevEvaluacion.setItems(obsListEval);
+                conn.close();
+
             } catch (SQLException ex) {
                 alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta", Alert.AlertType.ERROR);
                 alertConexion.showAndWait();
@@ -358,7 +471,39 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
     }
 
     @FXML
-    private void clicRegistrar(ActionEvent event) {
+    private void clicElementoBibliografia(MouseEvent event) {
+        if (tablevBibliografia.hasProperties()) {
+            btnBorrarBibliografia.setDisable(false);
+        } else {
+            btnBorrarBibliografia.setDisable(true);
+        }
+    }
+
+    @FXML
+    private void clicElementoEval(MouseEvent event) {
+        if (tablevEvaluacion.hasProperties()) {
+            btnBorrarEval.setDisable(false);
+        } else {
+            btnBorrarEval.setDisable(true);
+        }
+    }
+
+    @FXML
+    private void activarBtnBibliografia(KeyEvent event) {
+        btnAddBibliografia.setDisable(false);
+    }
+
+    @FXML
+    private void activarBtnEval(KeyEvent event) {
+        btnAddEval.setDisable(false);
+    }
+
+    @FXML
+    private void clicActualizar(ActionEvent event) {
+        ProgramaEstudio programaRecibido = new ProgramaEstudio();
+        programaRecibido = obsListPrograma.get(0);
+        int id = programaRecibido.getIdProgramaEstudio();
+        idProgramaRegistrado = id;
         String codigo = txtCodigo.getText();
         String creditos = txtCreditos.getText();
         String modalidad = txtModalidad.getText();
@@ -370,13 +515,13 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
         String saberAxiologico = txtAxiologicos.getText();
 
         if (validarSeleccionElementos() && validarCampos(codigo, creditos, modalidad, oportunidades, perfil, acreditacion)) {
-            if (!obsListBibliografia.isEmpty() && !obsListEval.isEmpty() && dateElaboracion.getValue() != null && dateModificacion.getValue() != null) {
-                LocalDate idFechaElab = dateElaboracion.getValue();
-                LocalDate idFechaMod = dateModificacion.getValue();
+            if (!obsListBibliografia.isEmpty() && !obsListEval.isEmpty() && dateModificacion.getValue() != null && dateAprobacion.getValue() != null) {
 
-                String fechaElab = idFechaElab.toString();
+                LocalDate idFechaMod = dateModificacion.getValue();
+                LocalDate idFechaElab = dateAprobacion.getValue();
+                String fechaElab = programaRecibido.getFechaElaboracion();
                 String fechaMod = idFechaMod.toString();
-                String fechaAprob = "00/00/00";
+                String fechaAprob = idFechaMod.toString();
 
                 ExperienciaEducativa exp = new ExperienciaEducativa();
                 exp = combExperiencia.getSelectionModel().getSelectedItem();
@@ -394,26 +539,24 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
                 campus = combCampus.getSelectionModel().getSelectedItem();
                 int idCampus = campus.getIdCampus();
 
-                registrarPrograma(codigo, creditos, modalidad, oportunidades, perfil, acreditacion, fechaElab, fechaMod, fechaAprob, idExperiencia, idAcademia, idCarrera, idCampus, saberTeorico, saberHeuristico, saberAxiologico);
+                actualizarPrograma(id, codigo, creditos, modalidad, oportunidades, perfil, acreditacion, fechaElab, fechaMod, fechaAprob, idExperiencia, idAcademia, idCarrera, idCampus, saberTeorico, saberHeuristico, saberAxiologico);
 
-                ObservableList<BibliografiaProgramaEstudio> iterarBibliografia = obsListBibliografia;
-                for (BibliografiaProgramaEstudio bibliografiaIndice : iterarBibliografia) {
-
+                eliminarBibliografias();
+                for (BibliografiaProgramaEstudio bibliografiaIndice : obsListBibliografia) {
                     registrarBibliografia(bibliografiaIndice.getAutor(), bibliografiaIndice.getTitulo(), bibliografiaIndice.getEditorial(), bibliografiaIndice.getAnio());
                 }
 
-                ObservableList<EvaluacionProgramaEstudio> iterarEvaluacion = obsListEval;
-                for (EvaluacionProgramaEstudio evalIndice : iterarEvaluacion) {
-
-                    registrarEvaluaciones(evalIndice.getEvidencia(), evalIndice.getCriterio(), evalIndice.getAmbito(), evalIndice.getPorcentaje());
+                eliminarEvaluaciones();
+                for (EvaluacionProgramaEstudio evalIndice : obsListEval) {
+                    registrarTemas(evalIndice.getEvidencia(), evalIndice.getCriterio(), evalIndice.getAmbito(), evalIndice.getPorcentaje());
                 }
 
-                concluirRegistro();
+                concluirActualizacion();
 
                 return;
             } else {
                 alertConexion = Herramientas.constructorDeAlertas("Tablas vacías",
-                        "Debe agregar Actividades y Temas al Plan de curso antes de registrarlo", Alert.AlertType.ERROR);
+                        "Agregar información a la tabla!", Alert.AlertType.ERROR);
                 alertConexion.showAndWait();
             }
         } else {
@@ -421,6 +564,12 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
                     "Existen campos faltantes o son incorrectos para registrar el plan de curso", Alert.AlertType.ERROR);
             alertConexion.showAndWait();
         }
+    }
+
+    @FXML
+    private void btCancelar(ActionEvent event) {
+        Stage stage = (Stage) btCancelar.getScene().getWindow();
+        stage.close();
     }
 
     private boolean validarSeleccionElementos() {
@@ -458,44 +607,30 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
         return true;
     }
 
-    private void registrarPrograma(String codigo, String creditos, String modalidad, String oportunidades, String perfil, String acreditacion, String fechaElab, String fechaMod, String fechaAprob, int idExperiencia, int idAcademia, int idCarrera, int idCampus, String saberTeorico, String saberHeuristico, String saberAxiologico) {
+    private void actualizarPrograma(int id, String codigo, String creditos, String modalidad, String oportunidades, String perfil, String acreditacion, String fechaElab, String fechaMod, String fechaAprob, int idExperiencia, int idAcademia, int idCarrera, int idCampus, String saberTeorico, String saberHeuristico, String saberAxiologico) {
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if (conn != null) {
             try {
-                String consulta = "INSERT INTO programaEstudio (idExperienciaEducativa, idCarrera, idCampus, idAreaAcademica, codigo, creditos, modalidad, oportunidades, fechaElaboracion, fechaModificacion, fechaAprobacion, perfil, saberTeorico, saberHeuristico, saberAxiologico, acreditacion) VALUES (?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?)";
-                PreparedStatement ps = conn.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS);
-                ps.setInt(1, idExperiencia);
-                ps.setInt(2, idCarrera);
-                ps.setInt(3, idCampus);
-                ps.setInt(4, idAcademia);
-                ps.setString(5, codigo);
-                ps.setInt(6, parseInt(creditos));
-                ps.setString(7, modalidad);
-                ps.setString(8, oportunidades);
-                ps.setString(9, fechaElab);
-                ps.setString(10, fechaMod);
-                ps.setString(11, fechaAprob);
-                ps.setString(12, perfil);
-                ps.setString(13, saberTeorico);
-                ps.setString(14, saberHeuristico);
-                ps.setString(15, saberAxiologico);
-                ps.setString(16, acreditacion);
+                String consulta = "UPDATE programaEstudio SET idCarrera=?, idCampus=?, idAreaAcademica=?, codigo=?, creditos=?, modalidad=?, oportunidades=?, fechaElaboracion=?, fechaModificacion=?, fechaAprobacion=?, perfil=?, saberTeorico=?, saberHeuristico=?, saberAxiologico=?, acreditacion=? WHERE idProgramaEstudio = " + id;
+                PreparedStatement ps = conn.prepareStatement(consulta);
+                ps.setInt(1, idCarrera);
+                ps.setInt(2, idCampus);
+                ps.setInt(3, idAcademia);
+                ps.setString(4, codigo);
+                ps.setInt(5, parseInt(creditos));
+                ps.setString(6, modalidad);
+                ps.setString(7, oportunidades);
+                ps.setString(8, fechaElab);
+                ps.setString(9, fechaMod);
+                ps.setString(10, fechaAprob);
+                ps.setString(11, perfil);
+                ps.setString(12, saberTeorico);
+                ps.setString(13, saberHeuristico);
+                ps.setString(14, saberAxiologico);
+                ps.setString(15, acreditacion);
 
-                int affectedRows = ps.executeUpdate();
-                if (affectedRows == 0) {
-                    throw new SQLException("Creating user failed, no rows affected.");
-                }
-
-                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        idProgramaEstudio = (int) generatedKeys.getLong(1);
-                    } else {
-                        throw new SQLException("Creating user failed, no ID obtained.");
-                    }
-                }
-
+                ps.executeUpdate();
                 ps.close();
-
                 conn.close();
             } catch (SQLException ex) {
                 alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta" + ex.getMessage(), Alert.AlertType.ERROR);
@@ -506,6 +641,44 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
             alertConexion.showAndWait();
         }
 
+    }
+
+    private void eliminarBibliografias() {
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        if (conn != null) {
+            try {
+                String consulta = "DELETE FROM programaEstudioBibliografia WHERE idProgramaEstudio = " + idProgramaRegistrado;
+                PreparedStatement ps = conn.prepareStatement(consulta);
+                ps.executeUpdate();
+                ps.close();
+                conn.close();
+            } catch (SQLException ex) {
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta eliminarBibliografia", "La consulta a la base de datos no es correcta" + ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion.showAndWait();
+            }
+        } else {
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+    }
+
+    private void eliminarEvaluaciones() {
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        if (conn != null) {
+            try {
+                String consulta = "DELETE FROM programaEstudioEvaluacion WHERE idProgramaEstudio = " + idProgramaRegistrado;
+                PreparedStatement ps = conn.prepareStatement(consulta);
+                ps.executeUpdate();
+                ps.close();
+                conn.close();
+            } catch (SQLException ex) {
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta eliminarEvaluacion", "La consulta a la base de datos no es correcta" + ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion.showAndWait();
+            }
+        } else {
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
     }
 
     private void registrarBibliografia(String autor, String titulo, String editorial, int anio) {
@@ -518,7 +691,7 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
                 ps.setString(2, titulo);
                 ps.setString(3, editorial);
                 ps.setInt(4, anio);
-                ps.setInt(5, idProgramaEstudio);
+                ps.setInt(5, idProgramaRegistrado);
 
                 ps.executeUpdate();
                 ps.close();
@@ -533,7 +706,7 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
         }
     }
 
-    private void registrarEvaluaciones(String evidencia, String criterio, String ambito, int porcentaje) {
+    private void registrarTemas(String evidencia, String criterio, String ambito, int porcentaje) {
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if (conn != null) {
             try {
@@ -543,7 +716,7 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
                 ps.setString(2, criterio);
                 ps.setString(3, ambito);
                 ps.setInt(4, porcentaje);
-                ps.setInt(5, idProgramaEstudio);
+                ps.setInt(5, idProgramaRegistrado);
 
                 ps.executeUpdate();
                 ps.close();
@@ -558,17 +731,12 @@ public class RegistrarProgramaDeEstudiosController implements Initializable {
         }
     }
 
-    private void concluirRegistro() {
+    private void concluirActualizacion() {
         alertConexion = Herramientas.constructorDeAlertas("Registro exitoso",
-                "Se ha concluido con el registro del plan de trabajo de academia", Alert.AlertType.INFORMATION);
+                "Se ha concluido con exito la actualizacion de del programa de estudios!", Alert.AlertType.INFORMATION);
         alertConexion.showAndWait();
         Stage stage = (Stage) btCancelar.getScene().getWindow();
         stage.close();
     }
 
-    @FXML
-    private void btCancelar(ActionEvent event) {
-        Stage stage = (Stage) btCancelar.getScene().getWindow();
-        stage.close();
-    }
 }

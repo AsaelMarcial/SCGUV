@@ -136,6 +136,9 @@ public class VerProgramaDeEstudiosController implements Initializable {
             stage.setResizable(false);
             stage.setTitle("Ver programa de estudios");
             stage.showAndWait();
+            btnVisualizarPrograma.setDisable(true);
+            btnActualizarPrograma.setDisable(true);
+            btnEliminarPrograma.setDisable(true);
         } catch (IOException ex) {
             System.out.println("Error al cargar FXML ->  " + ex.getMessage());
         }
@@ -144,6 +147,32 @@ public class VerProgramaDeEstudiosController implements Initializable {
 
     @FXML
     private void clicActualizarPrograma(ActionEvent event) {
+        ProgramaEstudio programa = new ProgramaEstudio();
+        programa = listvProgramaDeEstudios.getSelectionModel().getSelectedItem();
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ActualizarProgramaDeEstudios.fxml"));
+             
+            Parent root = loader.load();
+            
+            ActualizarProgramaDeEstudiosController controlador = loader.getController();
+            controlador.pasarPrograma(programa);
+           
+
+            Scene scene= new Scene(root);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Actualizar plan de trabajo de academia");
+            stage.showAndWait();
+
+            btnVisualizarPrograma.setDisable(true);
+            btnActualizarPrograma.setDisable(true);
+            btnEliminarPrograma.setDisable(true);
+            
+        }catch(IOException ex){
+            System.out.println("Error al cargar FXML ->  "+ex.getMessage());
+        }
     }
 
     @FXML
