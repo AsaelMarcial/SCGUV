@@ -43,7 +43,6 @@ public class VerExperienciasEducativasController implements Initializable {
     @FXML
     private ListView<ExperienciaEducativa> listvExperienciasEducativas;
     
-    @FXML
     private Button btnActualizarExperienciaEducativa;
     
     private ObservableList<ExperienciaEducativa> experienciasEducativas;
@@ -51,6 +50,8 @@ public class VerExperienciasEducativasController implements Initializable {
     private Button btnRegistrarExperienciaEducativa;
     @FXML
     private Button btnSalir;
+    @FXML
+    private Button btnEliminarExperienciaEducativa;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -93,9 +94,9 @@ public class VerExperienciasEducativasController implements Initializable {
     private void clicElementoLista(MouseEvent event) {
         
         if (listvExperienciasEducativas.hasProperties()){
-            btnActualizarExperienciaEducativa.setDisable(false);
+            btnEliminarExperienciaEducativa.setDisable(false);
         }else{
-            btnActualizarExperienciaEducativa.setDisable(true);
+            btnEliminarExperienciaEducativa.setDisable(true);
         }
     }
 
@@ -119,6 +120,49 @@ public class VerExperienciasEducativasController implements Initializable {
                 System.out.println("Error al cargar FXML"+ex.getMessage());
             }
     }
+
+    @FXML
+    private void clickEliminarExperienciaEducativa(ActionEvent event) {
+        ExperienciaEducativa experienciaEducativa = new ExperienciaEducativa();
+        experienciaEducativa = listvExperienciasEducativas.getSelectionModel().getSelectedItem();
+        int idExperienciaEducativa = experienciaEducativa.getIdExperienciaEducativa();
+        
+        eliminarExperienciaEducativa(idExperienciaEducativa);
+        CargaListaDeExperienciasEducativas();
+        btnEliminarExperienciaEducativa.setDisable(true);
+    }
   
-    
+     private void eliminarExperienciaEducativa(int idExperienciaEducativa){
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        Alert alertConexion;
+        if(conn != null){
+            try{
+             String consulta = "DELETE FROM experienciaEducativa WHERE idExperienciaEducativa = "+idExperienciaEducativa;
+             PreparedStatement ps = conn.prepareStatement(consulta);
+             ps.executeUpdate();
+             ps.close();
+             conn.close();
+            }catch(SQLException ex){
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta eliminarExperienciaEducativa", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion.showAndWait();   
+            }
+        }else{
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+    }
+
+    @FXML
+    private void clickSalir(ActionEvent event) {
+        try{
+                Stage stage = (Stage) btnSalir.getScene().getWindow();
+                        Scene sceneAdministrador = new Scene(FXMLLoader.load(getClass().getResource("InicioAdministrador.fxml")));
+                        stage.setScene(sceneAdministrador);
+                
+                stage.show();
+            } catch(IOException ex){
+                System.out.println("Error al cargar FXML"+ex.getMessage());
+            }
+        
+    }
 }

@@ -46,10 +46,15 @@ public class VerPeriodosController implements Initializable {
     @FXML
     private ListView<Periodo> listvPeriodos;
     
-    @FXML
     private Button btnActualizarPeriodo;
     
     private ObservableList<Periodo> periodos;
+    @FXML
+    private Button btnRegistrarPeriodo;
+    @FXML
+    private Button btnSalir;
+    @FXML
+    private Button btnEliminarPeriodo;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -59,6 +64,7 @@ public class VerPeriodosController implements Initializable {
     }    
     
     private void CargaListaDePeriodos(){
+        
         Connection conn = ConexionBD.iniciarConexionMySQL();
         Alert alertConexion;
         if(conn != null){
@@ -91,37 +97,54 @@ public class VerPeriodosController implements Initializable {
     private void clicElementoLista(MouseEvent event) {
         
         if (listvPeriodos.hasProperties()){
-            btnActualizarPeriodo.setDisable(false);
+            btnEliminarPeriodo.setDisable(false);
         }else{
-            btnActualizarPeriodo.setDisable(true);
+            btnEliminarPeriodo.setDisable(true);
         }
     }
-    
-    /*
+
     @FXML
-    private void clicActualizarPeriodo(ActionEvent event) {
+    private void clickEliminarPeriodo(ActionEvent event) {
         Periodo periodo = new Periodo();
         periodo = listvPeriodos.getSelectionModel().getSelectedItem();
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("ActualizarPeriodo.fxml"));
-             
-            Parent root = loader.load();
-            
-            VisualizarPlanDeTrabajoController controlador = loader.getController();
-            controlador.pasarPlan(periodo);
-           
-
-            Scene sceneOpcion = new Scene(root);
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(sceneOpcion);
-            stage.setResizable(false);
-            stage.setTitle("Actualizar periodo");
-            stage.showAndWait();
+        int idPeriodo = periodo.getIdPeriodo();
         
-        }catch(IOException ex){
-            System.out.println("Error al cargar FXML ->  "+ex.getMessage());
+        eliminarPeriodo(idPeriodo);
+        CargaListaDePeriodos();
+        btnEliminarPeriodo.setDisable(true);
+    }
+
+    private void eliminarPeriodo(int idPeriodo){
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        Alert alertConexion;
+        if(conn != null){
+            try{
+             String consulta = "DELETE FROM periodo WHERE idPeriodo = "+idPeriodo;
+             PreparedStatement ps = conn.prepareStatement(consulta);
+             ps.executeUpdate();
+             ps.close();
+             conn.close();
+            }catch(SQLException ex){
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta eliminarPeriodo", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion.showAndWait();   
+            }
+        }else{
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
         }
     }
-    */
+
+    @FXML
+    private void clickSalir(ActionEvent event) {
+        try{
+                Stage stage = (Stage) btnSalir.getScene().getWindow();
+                        Scene sceneAdministrador = new Scene(FXMLLoader.load(getClass().getResource("InicioAdministrador.fxml")));
+                        stage.setScene(sceneAdministrador);
+                
+                stage.show();
+            } catch(IOException ex){
+                System.out.println("Error al cargar FXML"+ex.getMessage());
+            }
+        
+    }
 }

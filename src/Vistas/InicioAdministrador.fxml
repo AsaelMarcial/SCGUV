@@ -7,12 +7,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="410.0" prefWidth="395.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vistas.InicioAdministradorController">
    <children>
-      <Button fx:id="btnVerAcademias" defaultButton="true" layoutX="78.0" layoutY="108.0" mnemonicParsing="false" onAction="#clicVerAcademias" prefHeight="46.0" prefWidth="240.0" style="-fx-background-color: #3369CD;" text="Ver academias" textAlignment="CENTER" textFill="WHITE">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button fx:id="btnVerPlanesDeTrabajo" layoutX="78.0" layoutY="177.0" mnemonicParsing="false" onAction="#clicVerAcademicos" prefHeight="46.0" prefWidth="240.0" style="-fx-background-color: #3369CD;" text="Ver académicos" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="btnVerAcademicos" layoutX="78.0" layoutY="127.0" mnemonicParsing="false" onAction="#clicVerAcademicos" prefHeight="46.0" prefWidth="240.0" style="-fx-background-color: #3369CD;" text="Ver académicos" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font>
@@ -22,13 +17,13 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Button fx:id="btnVerMinutas" layoutX="78.0" layoutY="248.0" mnemonicParsing="false" onAction="#clicVerExperienciasEducativas" prefHeight="46.0" prefWidth="240.0" style="-fx-background-color: #3369CD;" text="Ver experiencias educativas" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="btnVerExperienciasEducativas" layoutX="78.0" layoutY="198.0" mnemonicParsing="false" onAction="#clicVerExperienciasEducativas" prefHeight="46.0" prefWidth="240.0" style="-fx-background-color: #3369CD;" text="Ver experiencias educativas" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
       <Label layoutX="164.0" layoutY="58.0" text="Administrador" />
-      <Button fx:id="btnVerProgramasDeEstudios" layoutX="79.0" layoutY="318.0" mnemonicParsing="false" onAction="#clicVerPeriodos" prefHeight="46.0" prefWidth="240.0" style="-fx-background-color: #3369CD;" text="Ver periodos" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="btnVerPeriodos" layoutX="79.0" layoutY="268.0" mnemonicParsing="false" onAction="#clicVerPeriodos" prefHeight="46.0" prefWidth="240.0" style="-fx-background-color: #3369CD;" text="Ver periodos" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font>
