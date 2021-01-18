@@ -6,12 +6,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="434.0" prefWidth="445.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="Vistas.VerExperienciasEducativasController">
+<AnchorPane id="AnchorPane" prefHeight="434.0" prefWidth="445.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vistas.VerExperienciasEducativasController">
     <children>
       <ListView fx:id="listvExperienciasEducativas" layoutX="40.0" layoutY="83.0" onMouseClicked="#clicElementoLista" prefHeight="315.0" prefWidth="235.0" style="-fx-background-color: #E9EBEE;" />
       <Button fx:id="btnActualizarExperienciaEducativa" disable="true" layoutX="310.0" layoutY="162.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" style="-fx-background-color: #F4C532;" text="Actualizar Experiencia. E." textFill="WHITE" />
       <Label layoutX="40.0" layoutY="58.0" text="Experiencias educativas" />
-      <Button fx:id="btnRegistrarExperienciaEducativa" layoutX="310.0" layoutY="117.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" style="-fx-background-color: #27B232;" text="Registrar Experiencia. E." textFill="WHITE" />
+      <Button fx:id="btnRegistrarExperienciaEducativa" layoutX="310.0" layoutY="117.0" mnemonicParsing="false" onAction="#clickRegistrarExperienciaEducativa" prefHeight="25.0" prefWidth="114.0" style="-fx-background-color: #27B232;" text="Registrar Experiencia. E." textFill="WHITE" />
       <Button fx:id="btnSalir" layoutX="377.0" layoutY="373.0" mnemonicParsing="false" text="Salir" />
       <Label layoutX="130.0" layoutY="22.0" text="Experiencias educativas">
          <font>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="514.0" prefWidth="348.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vistas.RegistrarAcademicoController">
+   <children>
+      <Label layoutX="94.0" layoutY="25.0" text="Registro academico">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="32.0" layoutY="85.0" prefHeight="18.0" prefWidth="124.0" text="Nombre" />
+      <TextField fx:id="txtNombreAcademico" layoutX="32.0" layoutY="112.0" prefHeight="26.0" prefWidth="219.0" />
+      <Label layoutX="32.0" layoutY="157.0" prefHeight="18.0" prefWidth="142.0" text="Numero personal" />
+      <TextField fx:id="txtNumeroPersonal" layoutX="32.0" layoutY="184.0" prefHeight="26.0" prefWidth="103.0" />
+      <Label layoutX="32.0" layoutY="233.0" prefHeight="18.0" prefWidth="191.0" text="Correo electrónico" />
+      <TextField fx:id="txtCorreoAcademico" layoutX="32.0" layoutY="260.0" prefHeight="26.0" prefWidth="219.0" />
+      <Button fx:id="btnGuardarAcademico" layoutX="64.0" layoutY="428.0" mnemonicParsing="false" onAction="#clickGuardarAcademico" text="Guardar" />
+      <Button layoutX="219.0" layoutY="428.0" mnemonicParsing="false" text="Cancelar" />
+      <Label layoutX="32.0" layoutY="316.0" prefHeight="18.0" prefWidth="191.0" text="Academia" />
+      <ComboBox fx:id="cbAcademia" layoutX="32.0" layoutY="348.0" prefHeight="26.0" prefWidth="219.0" />
+   </children>
+</AnchorPane>

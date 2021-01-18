@@ -47,6 +47,12 @@ public class VerAcademicosController implements Initializable {
     private Button btnActualizarAcademico;
     
     private ObservableList<Academico> academicos;
+    @FXML
+    private Button btnRegistrarAcademico;
+    @FXML
+    private Button btnSalir;
+    @FXML
+    private Button btnRefrescarLista;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -56,6 +62,7 @@ public class VerAcademicosController implements Initializable {
     }
     
     private void CargaListaDeAcademicos(){
+        academicos.removeAll(academicos);
         Connection conn = ConexionBD.iniciarConexionMySQL();
         Alert alertConexion;
         if(conn != null){
@@ -93,5 +100,30 @@ public class VerAcademicosController implements Initializable {
             btnActualizarAcademico.setDisable(true);
         }
     }
-  
+    
+    @FXML
+    private void clickRegistrarAcademico(ActionEvent event){
+        try{
+                
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("RegistrarAcademico.fxml"));
+            Parent root = loader.load();
+            
+            
+            Scene sceneRegistroAcademico = new Scene(root);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(sceneRegistroAcademico);
+            stage.showAndWait();
+            
+            CargaListaDeAcademicos();
+                
+            } catch(IOException ex){
+                System.out.println("Error al cargar FXML"+ex.getMessage());
+            }
+    }
+
+    @FXML
+    private void clickRefrescarLista(ActionEvent event) {
+        listvAcademicos.refresh();
+    }
 }

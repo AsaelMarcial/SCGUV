@@ -47,6 +47,10 @@ public class VerExperienciasEducativasController implements Initializable {
     private Button btnActualizarExperienciaEducativa;
     
     private ObservableList<ExperienciaEducativa> experienciasEducativas;
+    @FXML
+    private Button btnRegistrarExperienciaEducativa;
+    @FXML
+    private Button btnSalir;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -56,6 +60,7 @@ public class VerExperienciasEducativasController implements Initializable {
     }
     
     private void CargaListaDeExperienciasEducativas(){
+        experienciasEducativas.removeAll(experienciasEducativas);
         Connection conn = ConexionBD.iniciarConexionMySQL();
         Alert alertConexion;
         if(conn != null){
@@ -92,6 +97,27 @@ public class VerExperienciasEducativasController implements Initializable {
         }else{
             btnActualizarExperienciaEducativa.setDisable(true);
         }
+    }
+
+    @FXML
+    private void clickRegistrarExperienciaEducativa(ActionEvent event) {
+        try{
+                
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("RegistrarExperienciaEducativa.fxml"));
+            Parent root = loader.load();
+            
+            
+            Scene sceneRegistroExperienciaEducativa = new Scene(root);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(sceneRegistroExperienciaEducativa);
+            stage.showAndWait();
+            
+            CargaListaDeExperienciasEducativas();
+                
+            } catch(IOException ex){
+                System.out.println("Error al cargar FXML"+ex.getMessage());
+            }
     }
   
     
