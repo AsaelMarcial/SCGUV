@@ -48,7 +48,10 @@ public class RegistrarAcademicoController implements Initializable {
     @FXML
     private Button btnGuardarAcademico;
 
+    @FXML
     private ComboBox<Academia> cbAcademia;
+    
+    private int idAcademicoRegistrado;
     
     private ObservableList<Academia> academias;
     /**
@@ -99,6 +102,8 @@ public class RegistrarAcademicoController implements Initializable {
         
         String correoAux = txtCorreoAcademico.getText();
         
+        int posAcademia = cbAcademia.getSelectionModel().getSelectedIndex();
+        
         if(nombreAcademicoAux.isEmpty()){
             isValido = false;
         }
@@ -111,15 +116,19 @@ public class RegistrarAcademicoController implements Initializable {
             isValido = false;
         }
         
+        if(posAcademia < 0){
+            isValido = false;
+        }
+        
         if(isValido){
-            guardaAcademico(nombreAcademicoAux, numeroPersonalAux, correoAux);
+            guardaAcademico(nombreAcademicoAux, numeroPersonalAux, correoAux, academias.get(posAcademia).getIdAcademia());
         } else{
             Alert alertConexion = Herramientas.constructorDeAlertas("Campos obligatorios", "Por favor llene los campos para continuar", Alert.AlertType.ERROR);
             alertConexion.showAndWait();
         }
     }
     
-    private void guardaAcademico(String nombreAcademico, String numeroPersonal, String correoElectronico){
+    private void guardaAcademico(String nombreAcademico, String numeroPersonal, String correoElectronico, int idAcademia){
         
         Connection conn = ConexionBD.iniciarConexionMySQL();
         Alert alertConexion;
@@ -134,6 +143,24 @@ public class RegistrarAcademicoController implements Initializable {
              int resultado = ps.executeUpdate();
              
              if(resultado > 0){
+                 
+                int affectedRows = ps.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new SQLException("Creating user failed, no rows affected.");
+                }
+             
+                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        idAcademicoRegistrado = (int) generatedKeys.getLong(1);
+                        guardaAcademiaAcademico(idAcademicoRegistrado, idAcademia);
+                    }
+                    else {
+                        throw new SQLException("Creating user failed, no ID obtained.");
+                    }
+                }
+             
+             ps.close();
+                 
                 alertConexion = Herramientas.constructorDeAlertas("Registrado", "Academico registrado con éxito", Alert.AlertType.INFORMATION);
                 alertConexion.showAndWait();
                 
@@ -162,4 +189,34 @@ public class RegistrarAcademicoController implements Initializable {
         
     }
     
+    private void guardaAcademiaAcademico(int idAcademico, int idAcademia){
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        Alert alertConexion;
+        
+        if(conn != null){
+            try{
+             String consulta = "INSERT INTO academiaAcademico (idAcademia, idAcademico, idAcademia) VALUES (?, ?)";
+             PreparedStatement ps = conn.prepareStatement(consulta);
+             ps.setInt(1, idAcademia);
+             ps.setInt(2, idAcademico);
+             int resultado = ps.executeUpdate();
+             
+             if(resultado > 0){
+                alertConexion = Herramientas.constructorDeAlertas("Registrado", "", Alert.AlertType.INFORMATION);
+                alertConexion.showAndWait();
+                
+             }else{
+                alertConexion = Herramientas.constructorDeAlertas("Error en el registro", "", Alert.AlertType.ERROR);
+                alertConexion.showAndWait();
+             }
+             
+            }catch(SQLException ex){
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta", ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion.showAndWait();   
+            }
+        }else{
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+    }
 }
