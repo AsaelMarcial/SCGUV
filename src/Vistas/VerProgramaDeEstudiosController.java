@@ -50,67 +50,69 @@ public class VerProgramaDeEstudiosController implements Initializable {
     private Button btnRegistrarPrograma;
     @FXML
     private Button btnSalir;
-    
+
     private ObservableList<ProgramaEstudio> programas;
+    @FXML
+    private Button btnActualizar;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       listvProgramaDeEstudios.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-       programas = FXCollections.observableArrayList();
-       cargarListaDeProgramas();     
-    }    
+        listvProgramaDeEstudios.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        programas = FXCollections.observableArrayList();
+        cargarListaDeProgramas();
+    }
 
-    private void cargarListaDeProgramas(){
+    private void cargarListaDeProgramas() {
         Connection conn = ConexionBD.iniciarConexionMySQL();
         Alert alertConexion;
-        if(conn != null){
-            try{
-             String consulta = "SELECT * FROM programaEstudio";
-             PreparedStatement ps = conn.prepareStatement(consulta);
-             ResultSet rs = ps.executeQuery();
-             while(rs.next()){      
-                 ProgramaEstudio p = new ProgramaEstudio();
-                 p.setIdProgramaEstudio(rs.getInt("idProgramaEstudio"));
-                 p.setIdExperienciaEducativa(rs.getInt("idExperienciaEducativa"));
-                 p.setIdCarrera(rs.getInt("idCarrera"));
-                 p.setIdCampus(rs.getInt("idCampus"));
-                 p.setIdAreaAcademica(rs.getInt("idAreaAcademica"));
-                 p.setCodigo(rs.getString("codigo"));
-                 p.setCreditos(rs.getInt("creditos"));
-                 p.setModalidad(rs.getString("modalidad"));   
-                 p.setOportunidades(rs.getString("oportunidades"));
-                 p.setFechaElaboracion(rs.getString("fechaElaboracion"));
-                 p.setFechaModificacion(rs.getString("fechaModificacion"));
-                 p.setFechaAprobacion(rs.getString("fechaAprobacion"));
-                 p.setPerfil(rs.getString("perfil"));
-                 p.setSaberTeorico(rs.getString("saberTeorico"));
-                 p.setSaberHeuristico(rs.getString("saberHeuristico"));
-                 p.setSaberAxiologico(rs.getString("saberAxiologico"));
-                 p.setAcreditacion(rs.getString("acreditacion"));
-                 programas.add(p);
-             }
-             listvProgramaDeEstudios.setItems(programas);
-             conn.close();
-            }catch(SQLException ex){
+        if (conn != null) {
+            try {
+                String consulta = "SELECT * FROM programaEstudio";
+                PreparedStatement ps = conn.prepareStatement(consulta);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    ProgramaEstudio p = new ProgramaEstudio();
+                    p.setIdProgramaEstudio(rs.getInt("idProgramaEstudio"));
+                    p.setIdExperienciaEducativa(rs.getInt("idExperienciaEducativa"));
+                    p.setIdCarrera(rs.getInt("idCarrera"));
+                    p.setIdCampus(rs.getInt("idCampus"));
+                    p.setIdAreaAcademica(rs.getInt("idAreaAcademica"));
+                    p.setCodigo(rs.getString("codigo"));
+                    p.setCreditos(rs.getInt("creditos"));
+                    p.setModalidad(rs.getString("modalidad"));
+                    p.setOportunidades(rs.getString("oportunidades"));
+                    p.setFechaElaboracion(rs.getString("fechaElaboracion"));
+                    p.setFechaModificacion(rs.getString("fechaModificacion"));
+                    p.setFechaAprobacion(rs.getString("fechaAprobacion"));
+                    p.setPerfil(rs.getString("perfil"));
+                    p.setSaberTeorico(rs.getString("saberTeorico"));
+                    p.setSaberHeuristico(rs.getString("saberHeuristico"));
+                    p.setSaberAxiologico(rs.getString("saberAxiologico"));
+                    p.setAcreditacion(rs.getString("acreditacion"));
+                    programas.add(p);
+                }
+                listvProgramaDeEstudios.setItems(programas);
+                conn.close();
+            } catch (SQLException ex) {
                 alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta", Alert.AlertType.ERROR);
-                alertConexion.showAndWait();   
+                alertConexion.showAndWait();
             }
-        }else{
+        } else {
             alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
             alertConexion.showAndWait();
-        }      
+        }
     }
-    
+
     @FXML
-    private void clicElementoLista(MouseEvent event) {        
-        if (listvProgramaDeEstudios.hasProperties()){
+    private void clicElementoLista(MouseEvent event) {
+        if (listvProgramaDeEstudios.hasProperties()) {
             btnVisualizarPrograma.setDisable(false);
             btnActualizarPrograma.setDisable(false);
             btnEliminarPrograma.setDisable(false);
-        }else{
+        } else {
             btnVisualizarPrograma.setDisable(true);
             btnActualizarPrograma.setDisable(true);
             btnEliminarPrograma.setDisable(true);
@@ -121,23 +123,23 @@ public class VerProgramaDeEstudiosController implements Initializable {
     private void clicVisualizarPrograma(ActionEvent event) {
         ProgramaEstudio programa = new ProgramaEstudio();
         programa = listvProgramaDeEstudios.getSelectionModel().getSelectedItem();
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("visualizarProgramaDeEstudios.fxml"));        
-            Parent root = loader.load();         
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("visualizarProgramaDeEstudios.fxml"));
+            Parent root = loader.load();
             VisualizarProgramaDeEstudiosController controlador = loader.getController();
             controlador.pasarPrograma(programa);
-           
+
             Scene sceneOpcion = new Scene(root);
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(sceneOpcion);
             stage.setResizable(false);
-            stage.setTitle("Ver plan de trabajo de academia");
-            stage.showAndWait();      
-        }catch(IOException ex){
-            System.out.println("Error al cargar FXML ->  "+ex.getMessage());
+            stage.setTitle("Ver programa de estudios");
+            stage.showAndWait();
+        } catch (IOException ex) {
+            System.out.println("Error al cargar FXML ->  " + ex.getMessage());
         }
-        
+
     }
 
     @FXML
@@ -150,10 +152,32 @@ public class VerProgramaDeEstudiosController implements Initializable {
 
     @FXML
     private void clicRegistrarPrograma(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("RegistrarProgramaDeEstudios.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Registrar programa de estudios");
+            stage.showAndWait();
+
+        } catch (IOException ex) {
+            System.out.println("Error al cargar FXML ->  " + ex.getMessage());
+        }
     }
 
     @FXML
     private void clicSalir(ActionEvent event) {
+        Stage stage = (Stage) btnSalir.getScene().getWindow();
+        stage.close();
     }
-    
+
+    @FXML
+    private void clicActualizar(ActionEvent event) {
+        programas.clear();
+        cargarListaDeProgramas();
+    }
+
 }

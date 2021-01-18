@@ -24,5 +24,6 @@
             <Font size="18.0" />
          </font>
       </Label>
+      <Button fx:id="btnActualizar" layoutX="273.0" layoutY="363.0" mnemonicParsing="false" onAction="#clicActualizar" text="Actualizar" />
    </children>
 </AnchorPane>
