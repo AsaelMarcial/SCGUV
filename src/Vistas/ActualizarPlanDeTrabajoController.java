@@ -155,19 +155,18 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
     }
     
     public void pasarPlan(PlanTrabajoAcademia planRecibido){
-        System.out.println("pasarPlan");
         planObservable.add(0, planRecibido);
         cargarComboBoxPeriodo();
-        //cargarComboBoxAcademia(planRecibido.getIdPlanTrabajoAcademia());
-        //cargarComboBoxExperienciaEducativa(planRecibido.getIdAcademia());
-        //cargarCoordinador(planRecibido.getIdCoordinador());
-        //mostrarPlanDeCurso();
+        cargarComboBoxAcademia();
+        cargarComboBoxExperienciaEducativa(-1);
+        cargarCoordinador(-1);
+        
     }
     
    private void cargarComboBoxPeriodo(){
        
-       //Obtiene ID del periodo seleccionado
-       PlanTrabajoAcademia planRecibido = new PlanTrabajoAcademia();
+       //Obtiene ID del periodo en el PlanDeCurso seleccionado y recibido
+        PlanTrabajoAcademia planRecibido = new PlanTrabajoAcademia();
         planRecibido = planObservable.get(0);
         int idPeriodoPlanRecibido = planRecibido.getIdPeriodo();
         Periodo periodoRecibido = new Periodo();
@@ -182,7 +181,6 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
 
              while(rs.next()){
                  Periodo p = new Periodo();
-                 System.out.println("X");
                  p.setIdPeriodo(rs.getInt("idPeriodo"));
                  p.setNombre(rs.getString("nombre"));
                  periodos.add(p);
@@ -208,7 +206,14 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
         }
     }
    
-   private void cargarComboBoxAcademia(int idPlanTrabajoAcademia){
+   private void cargarComboBoxAcademia(){
+       
+        //Obtiene ID de la academia en el PlanDeCurso seleccionado y recibido
+        PlanTrabajoAcademia planRecibido = new PlanTrabajoAcademia();
+        planRecibido = planObservable.get(0);
+        int idAcademiaPlanRecibido = planRecibido.getIdAcademia();
+        Academia academiaRecibida = new Academia();
+        
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if(conn != null){
             try{
@@ -221,8 +226,15 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
                  a.setNombre(rs.getString("nombre"));
                  a.setIdCoordinador(rs.getInt("idCoordinador"));
                  academias.add(a);
+                 
+                 if(rs.getInt("idAcademia") == idAcademiaPlanRecibido){
+                     academiaRecibida.setIdAcademia(idAcademiaPlanRecibido);
+                     academiaRecibida.setNombre(rs.getString("nombre"));
+                 }
              }
+             
              cmbAcademia.setItems(academias);
+             cmbAcademia.valueProperty().setValue(academiaRecibida);
              conn.close();
              
             }catch(SQLException ex){
@@ -236,6 +248,15 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
     }
    
    private void cargarComboBoxExperienciaEducativa(int idAcademia){
+       
+       PlanTrabajoAcademia planRecibido = new PlanTrabajoAcademia();
+        planRecibido = planObservable.get(0);
+        
+        //Si proviene pasarPlan(), sino proviene de listener de cambio en combobox academia.
+        if(idAcademia == -1){
+           idAcademia = planRecibido.getIdAcademia();
+       }
+        
         Connection conn = ConexionBD.iniciarConexionMySQL();
         experienciasEducativas.clear();
         if(conn != null){
@@ -250,6 +271,10 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
                  e.setNrcExperienciaEducativa(rs.getString("nrc"));
                  e.setIdAcademia(idAcademia);
                  experienciasEducativas.add(e);
+                 
+                
+                 
+                 
              }
              cmbExperienciaEducativa.setItems(experienciasEducativas);
              conn.close();
@@ -264,6 +289,15 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
     }
    
    private void cargarCoordinador(int idCoordinador){
+       
+        PlanTrabajoAcademia planRecibido = new PlanTrabajoAcademia();
+        planRecibido = planObservable.get(0);
+        
+        //Si proviene pasarPlan(), sino proviene de listener de cambio en combobox academia.
+        if(idCoordinador == -1){
+          idCoordinador = planRecibido.getIdCoordinador();
+        }
+       
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if(conn != null){
             try{
