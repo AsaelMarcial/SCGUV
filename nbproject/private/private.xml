@@ -3,12 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/israz/OneDrive/Documentos/NetBeansProjects/SCGUV/src/Vistas/VerPlanesDeTrabajoController.java</file>
-            <file>file:/C:/Users/israz/OneDrive/Documentos/NetBeansProjects/SCGUV/src/Vistas/RegistrarPlanDeTrabajoController.java</file>
-            <file>file:/C:/Users/israz/OneDrive/Documentos/NetBeansProjects/SCGUV/src/Vistas/ActualizarPlanDeTrabajo.fxml</file>
-            <file>file:/C:/Users/israz/OneDrive/Documentos/NetBeansProjects/SCGUV/src/Vistas/VisualizarPlanDeTrabajoController.java</file>
-            <file>file:/C:/Users/israz/OneDrive/Documentos/NetBeansProjects/SCGUV/src/Pojos/ExperienciaEducativa.java</file>
-            <file>file:/C:/Users/israz/OneDrive/Documentos/NetBeansProjects/SCGUV/src/Vistas/ActualizarPlanDeTrabajoController.java</file>
+            <file>file:/C:/Users/asael/Documents/PCS/SCGUV/src/Vistas/VerExperienciasEducativasController.java</file>
+            <file>file:/C:/Users/asael/Documents/PCS/SCGUV/src/Vistas/ActualizarProgramaDeEstudiosController.java</file>
+            <file>file:/C:/Users/asael/Documents/PCS/SCGUV/src/Vistas/RegistrarProgramaDeEstudiosController.java</file>
+            <file>file:/C:/Users/asael/Documents/PCS/SCGUV/src/Vistas/SCGUV.java</file>
         </group>
     </open-files>
 </project-private>

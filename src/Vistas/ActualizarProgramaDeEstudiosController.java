@@ -189,6 +189,9 @@ public class ActualizarProgramaDeEstudiosController implements Initializable {
         txtCreditos.setText(String.valueOf(programa.getCreditos()));
         txtModalidad.setText(programa.getModalidad());
         txtOportunidades.setText(programa.getOportunidades());
+        txtTeoricos.setText(programa.getSaberTeorico());
+        txtHeuristicos.setText(programa.getSaberHeuristico());
+        txtAxiologicos.setText(programa.getSaberAxiologico());
         
         cargarComboBoxAcademia();
         cargarComboBoxCarrera();
