@@ -53,7 +53,7 @@ public class InicioCoordinadorController implements Initializable {
 
     @FXML
     private void clicVerProgramasDeEstudios(ActionEvent event) throws IOException {
-        abrirOpciónCliqueada("verProgramaDeEstudios.fxml");
+        abrirOpciónCliqueada("VerProgramaDeEstudios.fxml");
     }
     
     private void abrirOpciónCliqueada(String nombreFXML){
