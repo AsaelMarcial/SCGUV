@@ -19,8 +19,7 @@
       <Label layoutX="42.0" layoutY="167.0" prefHeight="18.0" prefWidth="142.0" text="NRC" />
       <TextField fx:id="txtNRC" layoutX="42.0" layoutY="194.0" prefHeight="26.0" prefWidth="103.0" />
       <Label layoutX="42.0" layoutY="243.0" prefHeight="18.0" prefWidth="191.0" text="Academia" />
-      <Button fx:id="btnGuardarExperienciaEducativa" layoutX="64.0" layoutY="338.0" mnemonicParsing="false" onAction="#clickGuardarExperienciaEducativa" text="Guardar" />
-      <Button layoutX="202.0" layoutY="338.0" mnemonicParsing="false" text="Cancelar" />
+      <Button fx:id="btnGuardarExperienciaEducativa" layoutX="135.0" layoutY="343.0" mnemonicParsing="false" onAction="#clickGuardarExperienciaEducativa" text="Guardar" />
       <ComboBox fx:id="cbAcademia" layoutX="42.0" layoutY="275.0" prefHeight="26.0" prefWidth="219.0" />
    </children>
 </AnchorPane>

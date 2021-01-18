@@ -46,8 +46,6 @@ public class VerPeriodosController implements Initializable {
     @FXML
     private ListView<Periodo> listvPeriodos;
     
-    private Button btnActualizarPeriodo;
-    
     private ObservableList<Periodo> periodos;
     @FXML
     private Button btnRegistrarPeriodo;
@@ -64,7 +62,7 @@ public class VerPeriodosController implements Initializable {
     }    
     
     private void CargaListaDePeriodos(){
-        
+        periodos.removeAll(periodos);
         Connection conn = ConexionBD.iniciarConexionMySQL();
         Alert alertConexion;
         if(conn != null){
@@ -142,6 +140,29 @@ public class VerPeriodosController implements Initializable {
                         stage.setScene(sceneAdministrador);
                 
                 stage.show();
+            } catch(IOException ex){
+                System.out.println("Error al cargar FXML"+ex.getMessage());
+            }
+        
+    }
+
+    @FXML
+    private void clickRegistrarPeriodo(ActionEvent event) {
+        
+        try{
+                
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("RegistrarPeriodo.fxml"));
+            Parent root = loader.load();
+            
+            
+            Scene sceneRegistroPeriodo = new Scene(root);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(sceneRegistroPeriodo);
+            stage.showAndWait();
+            
+            CargaListaDePeriodos();
+                
             } catch(IOException ex){
                 System.out.println("Error al cargar FXML"+ex.getMessage());
             }

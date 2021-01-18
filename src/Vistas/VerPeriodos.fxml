@@ -10,7 +10,7 @@
    <children>
       <ListView fx:id="listvPeriodos" layoutX="40.0" layoutY="83.0" onMouseClicked="#clicElementoLista" prefHeight="315.0" prefWidth="235.0" style="-fx-background-color: #E9EBEE;" />
       <Label layoutX="40.0" layoutY="66.0" text="Periodos" />
-      <Button fx:id="btnRegistrarPeriodo" layoutX="310.0" layoutY="117.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" style="-fx-background-color: #27B232;" text="Registrar periodo" textFill="WHITE" />
+      <Button fx:id="btnRegistrarPeriodo" layoutX="310.0" layoutY="117.0" mnemonicParsing="false" onAction="#clickRegistrarPeriodo" prefHeight="25.0" prefWidth="114.0" style="-fx-background-color: #27B232;" text="Registrar periodo" textFill="WHITE" />
       <Button fx:id="btnSalir" layoutX="347.0" layoutY="372.0" mnemonicParsing="false" onAction="#clickSalir" text="Salir" />
       <Label layoutX="173.0" layoutY="24.0" text="Periodos">
          <font>

@@ -43,16 +43,13 @@ public class VerAcademicosController implements Initializable {
     @FXML
     private ListView<Academico> listvAcademicos;
     
-    @FXML
-    private Button btnActualizarAcademico;
-    
     private ObservableList<Academico> academicos;
     @FXML
     private Button btnRegistrarAcademico;
     @FXML
     private Button btnSalir;
     @FXML
-    private Button btnRefrescarLista;
+    private Button btnEliminarAcademico;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -95,9 +92,9 @@ public class VerAcademicosController implements Initializable {
     private void clicElementoLista(MouseEvent event) {
         
         if (listvAcademicos.hasProperties()){
-            btnActualizarAcademico.setDisable(false);
+            btnEliminarAcademico.setDisable(false);
         }else{
-            btnActualizarAcademico.setDisable(true);
+            btnEliminarAcademico.setDisable(true);
         }
     }
     
@@ -123,7 +120,61 @@ public class VerAcademicosController implements Initializable {
     }
 
     @FXML
-    private void clickRefrescarLista(ActionEvent event) {
-        listvAcademicos.refresh();
+    private void clickEliminarAcademico(ActionEvent event) {
+        Academico academico = new Academico();
+        academico = listvAcademicos.getSelectionModel().getSelectedItem();
+        int idAcademico = academico.getIdAcademico();
+        
+        eliminarAcademico(idAcademico);
+        CargaListaDeAcademicos();
+        btnEliminarAcademico.setDisable(true);
+    }
+    
+    private void eliminarAcademico(int idAcademico){
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        Alert alertConexion;
+        if(conn != null){
+            try{
+             String consulta = "DELETE FROM academiaAcademico WHERE idAcademico = "+idAcademico;
+             PreparedStatement ps = conn.prepareStatement(consulta);
+             ps.executeUpdate();
+             ps.close();
+            }catch(SQLException ex){
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta eliminarAcademico", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion.showAndWait();   
+            }
+        }else{
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+        
+        if(conn != null){
+            try{
+             String consulta = "DELETE FROM academico WHERE idAcademico = "+idAcademico;
+             PreparedStatement ps = conn.prepareStatement(consulta);
+             ps.executeUpdate();
+             ps.close();
+             conn.close();
+            }catch(SQLException ex){
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta eliminarAcademico", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion.showAndWait();   
+            }
+        }else{
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+    }
+
+    @FXML
+    private void clickSalir(ActionEvent event) {
+        try{
+                Stage stage = (Stage) btnSalir.getScene().getWindow();
+                        Scene sceneAdministrador = new Scene(FXMLLoader.load(getClass().getResource("InicioAdministrador.fxml")));
+                        stage.setScene(sceneAdministrador);
+                
+                stage.show();
+            } catch(IOException ex){
+                System.out.println("Error al cargar FXML"+ex.getMessage());
+            }
     }
 }
