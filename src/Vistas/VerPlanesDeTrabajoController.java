@@ -131,6 +131,9 @@ public class VerPlanesDeTrabajoController implements Initializable {
             stage.setResizable(false);
             stage.setTitle("Ver plan de trabajo de academia");
             stage.showAndWait();
+            btnVisualizarPlan.setDisable(true);
+            btnActualizarPlan.setDisable(true);
+            btnEliminarPlan.setDisable(true);
         
         }catch(IOException ex){
             System.out.println("Error al cargar FXML ->  "+ex.getMessage());
@@ -160,7 +163,10 @@ public class VerPlanesDeTrabajoController implements Initializable {
             stage.showAndWait();
             
             CargaListaDePlanes();
-        
+            btnVisualizarPlan.setDisable(true);
+            btnActualizarPlan.setDisable(true);
+            btnEliminarPlan.setDisable(true);
+            
         }catch(IOException ex){
             System.out.println("Error al cargar FXML ->  "+ex.getMessage());
         }
@@ -185,7 +191,10 @@ public class VerPlanesDeTrabajoController implements Initializable {
             stage.setTitle("Registrar plan de trabajo de academia");
             stage.showAndWait();
             CargaListaDePlanes();
-        
+            btnVisualizarPlan.setDisable(true);
+            btnActualizarPlan.setDisable(true);
+            btnEliminarPlan.setDisable(true);
+            
         }catch(IOException ex){
             System.out.println("Error al cargar FXML ->  "+ex.getMessage());
         }
