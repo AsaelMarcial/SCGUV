@@ -23,13 +23,8 @@ public class ExperienciaEducativa {
         return idExperienciaEducativa;
     }
 
-    public int getIdExperienciaEducativa() {
-        return idExperienciaEduactiva;
-    }
-
-    public void setIdExperienciaEducativa(int idExperienciaEduactiva) {
-        this.idExperienciaEduactiva = idExperienciaEduactiva;
-
+    public void setIdExperienciaEducativa(int idExperienciaEducativa) {
+        this.idExperienciaEducativa = idExperienciaEducativa;
     }
 
     public String getNombreExperienciaEducativa() {
@@ -55,6 +50,8 @@ public class ExperienciaEducativa {
     public void setIdAcademia(int idAcademia) {
         this.idAcademia = idAcademia;
     }
+
+    
 
     
     
