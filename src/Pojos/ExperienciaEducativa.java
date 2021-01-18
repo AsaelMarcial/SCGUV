@@ -2,19 +2,25 @@ package Pojos;
 
 public class ExperienciaEducativa {
     
-    private int idExperienciaEduactiva;
+    private int idExperienciaEducativa;
     private String nombreExperienciaEducativa;
     private String nrcExperienciaEducativa;
     private int idAcademia;
 
-    public ExperienciaEducativa(int idExperienciaEduactiva, String nombreExperienciaEducativa, String nrcExperienciaEducativa, int idAcademia) {
-        this.idExperienciaEduactiva = idExperienciaEduactiva;
+
+    public ExperienciaEducativa() {
+    }
+
+
+    public ExperienciaEducativa(int idExperienciaEducativa, String nombreExperienciaEducativa, String nrcExperienciaEducativa, int idAcademia) {
+        this.idExperienciaEducativa = idExperienciaEducativa;
         this.nombreExperienciaEducativa = nombreExperienciaEducativa;
         this.nrcExperienciaEducativa = nrcExperienciaEducativa;
         this.idAcademia = idAcademia;
     }
 
-    public ExperienciaEducativa() {
+    public int getIdExperienciaEducativa() {
+        return idExperienciaEducativa;
     }
 
     public int getIdExperienciaEducativa() {
@@ -23,6 +29,7 @@ public class ExperienciaEducativa {
 
     public void setIdExperienciaEducativa(int idExperienciaEduactiva) {
         this.idExperienciaEduactiva = idExperienciaEduactiva;
+
     }
 
     public String getNombreExperienciaEducativa() {
@@ -49,10 +56,12 @@ public class ExperienciaEducativa {
         this.idAcademia = idAcademia;
     }
 
+    
+    
+
     @Override
     public String toString() {
         return nombreExperienciaEducativa;
-    }
-    
+    }    
     
 }

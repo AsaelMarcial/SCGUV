@@ -56,6 +56,8 @@ public class VerPlanesDeTrabajoController implements Initializable {
     
     private ObservableList<PlanTrabajoAcademia> planes;
     
+    Alert alertConexion;
+    
     /**
      * Initializes the controller class.
      */
@@ -67,6 +69,7 @@ public class VerPlanesDeTrabajoController implements Initializable {
     }    
     
     private void CargaListaDePlanes(){
+        planes.removeAll(planes);
         Connection conn = ConexionBD.iniciarConexionMySQL();
         Alert alertConexion;
         if(conn != null){
@@ -96,6 +99,29 @@ public class VerPlanesDeTrabajoController implements Initializable {
             alertConexion.showAndWait();
         }
     }
+    
+    @FXML
+    private void clicRegistrarPlan(ActionEvent event) {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("RegistrarPlanDeTrabajo.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Registrar plan de trabajo de academia");
+            stage.showAndWait();
+            CargaListaDePlanes();
+            btnVisualizarPlan.setDisable(true);
+            btnActualizarPlan.setDisable(true);
+            btnEliminarPlan.setDisable(true);
+            
+        }catch(IOException ex){
+            System.out.println("Error al cargar FXML ->  "+ex.getMessage());
+        }
+        
+    }
 
     @FXML
     private void clicElementoLista(MouseEvent event) {
@@ -117,7 +143,6 @@ public class VerPlanesDeTrabajoController implements Initializable {
         plan = listvPlanesDeTrabajo.getSelectionModel().getSelectedItem();
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("VisualizarPlanDeTrabajo.fxml"));
-             
             Parent root = loader.load();
             
             VisualizarPlanDeTrabajoController controlador = loader.getController();
@@ -131,6 +156,9 @@ public class VerPlanesDeTrabajoController implements Initializable {
             stage.setResizable(false);
             stage.setTitle("Ver plan de trabajo de academia");
             stage.showAndWait();
+            btnVisualizarPlan.setDisable(true);
+            btnActualizarPlan.setDisable(true);
+            btnEliminarPlan.setDisable(true);
         
         }catch(IOException ex){
             System.out.println("Error al cargar FXML ->  "+ex.getMessage());
@@ -147,35 +175,105 @@ public class VerPlanesDeTrabajoController implements Initializable {
              
             Parent root = loader.load();
             
-            VisualizarPlanDeTrabajoController controlador = loader.getController();
+            ActualizarPlanDeTrabajoController controlador = loader.getController();
             controlador.pasarPlan(plan);
            
 
-            Scene sceneOpcion = new Scene(root);
+            Scene scene= new Scene(root);
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(sceneOpcion);
+            stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Actualizar plan de trabajo de academia");
             stage.showAndWait();
-        
+            
+            CargaListaDePlanes();
+            btnVisualizarPlan.setDisable(true);
+            btnActualizarPlan.setDisable(true);
+            btnEliminarPlan.setDisable(true);
+            
         }catch(IOException ex){
             System.out.println("Error al cargar FXML ->  "+ex.getMessage());
         }
     }
     
-    
-    @FXML
+     @FXML
     private void clicEliminarPlan(ActionEvent event) {
+        PlanTrabajoAcademia plan = new PlanTrabajoAcademia();
+        plan = listvPlanesDeTrabajo.getSelectionModel().getSelectedItem();
+        int idPlan = plan.getIdPlanTrabajoAcademia();
+        
+        eliminarTemas(idPlan);
+        eliminarActividades(idPlan);
+        eliminarPlan(idPlan);
+        CargaListaDePlanes();
+        btnVisualizarPlan.setDisable(true);
+        btnActualizarPlan.setDisable(true);
+        btnEliminarPlan.setDisable(true);
         
     }
     
-    @FXML
-    private void clicRegistrarPlan(ActionEvent event) {
+    private void eliminarPlan(int idPlan){
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        if(conn != null){
+            try{
+             String consulta = "DELETE FROM planAcademia WHERE idPlanAcademia = "+idPlan;
+             PreparedStatement ps = conn.prepareStatement(consulta);
+             ps.executeUpdate();
+             ps.close();
+             conn.close();
+            }catch(SQLException ex){
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta eliminarActividades", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion.showAndWait();   
+            }
+        }else{
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+    }
+    
+    private void eliminarActividades(int idPlan){
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        if(conn != null){
+            try{
+             String consulta = "DELETE FROM planAcademiaActividad WHERE idPlanAcademia = "+idPlan;
+             PreparedStatement ps = conn.prepareStatement(consulta);
+             ps.executeUpdate();
+             ps.close();
+             conn.close();
+            }catch(SQLException ex){
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta eliminarActividades", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion.showAndWait();   
+            }
+        }else{
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+    }
+    
+    private void eliminarTemas(int idPlan){
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        if(conn != null){
+            try{
+             String consulta = "DELETE FROM planAcademiaTema WHERE idPlanAcademia = "+idPlan;
+             PreparedStatement ps = conn.prepareStatement(consulta);
+             ps.executeUpdate();
+             ps.close();
+             conn.close();
+            }catch(SQLException ex){
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta eliminarTemas", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion.showAndWait();   
+            }
+        }else{
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
     }
 
     @FXML
     private void clicSalir(ActionEvent event) {
+        Stage stage = (Stage) btnSalir.getScene().getWindow();
+        stage.close();
     }
     
     

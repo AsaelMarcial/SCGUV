@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="447.0" prefWidth="475.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vistas.VerAcademicosController">
+    <children>
+      <ListView fx:id="listvAcademicos" layoutX="40.0" layoutY="83.0" onMouseClicked="#clicElementoLista" prefHeight="315.0" prefWidth="235.0" style="-fx-background-color: #E9EBEE;" />
+      <Button fx:id="btnEliminarAcademico" disable="true" layoutX="310.0" layoutY="162.0" mnemonicParsing="false" onAction="#clickEliminarAcademico" prefHeight="26.0" prefWidth="150.0" style="-fx-background-color: E44C2C;" text="Eliminar academico" textFill="WHITE" />
+      <Label layoutX="40.0" layoutY="59.0" text="Academicos" />
+      <Button fx:id="btnRegistrarAcademico" layoutX="310.0" layoutY="117.0" mnemonicParsing="false" onAction="#clickRegistrarAcademico" prefHeight="26.0" prefWidth="150.0" style="-fx-background-color: #27B232;" text="Registrar Academico" textFill="WHITE" />
+      <Button fx:id="btnSalir" layoutX="365.0" layoutY="385.0" mnemonicParsing="false" onAction="#clickSalir" text="Salir" />
+      <Label layoutX="190.0" layoutY="31.0" text="Academicos">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

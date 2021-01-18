@@ -72,7 +72,9 @@ public class VisualizarPlanDeTrabajoController implements Initializable {
     private TableColumn tbcTemasTema;
     
     public  Alert alertConexion;
+    
     private ObservableList<PlanTrabajoAcademia> planObservable;
+    
     private ObservableList<TemaPlanTrabajoAcademia> temas;
     private ObservableList<ActividadPlanTrabajoAcademia> actividades;
 
@@ -82,16 +84,17 @@ public class VisualizarPlanDeTrabajoController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         planObservable = FXCollections.observableArrayList();
+
+        actividades = FXCollections.observableArrayList();
+        this.tbcActividadesActividad.setCellValueFactory(new PropertyValueFactory("nombre"));
+        this.tbcActividadesFecha.setCellValueFactory(new PropertyValueFactory("fecha"));
+        this.tbcActividadesOperacion.setCellValueFactory(new PropertyValueFactory("operacion"));
         
         temas = FXCollections.observableArrayList();
         this.tbcTemasTema.setCellValueFactory(new PropertyValueFactory("nombre"));
         this.tbcTemasParcial.setCellValueFactory(new PropertyValueFactory("parcial"));
         this.tbcTemasExperienciaEducativa.setCellValueFactory(new PropertyValueFactory("nombreExperienciaEducativa"));
         
-        actividades = FXCollections.observableArrayList();
-        this.tbcActividadesActividad.setCellValueFactory(new PropertyValueFactory("nombre"));
-        this.tbcActividadesFecha.setCellValueFactory(new PropertyValueFactory("fecha"));
-        this.tbcActividadesOperacion.setCellValueFactory(new PropertyValueFactory("fecha"));
     }    
 
     public void pasarPlan(PlanTrabajoAcademia planRecibido){
@@ -107,8 +110,8 @@ public class VisualizarPlanDeTrabajoController implements Initializable {
         cargarDato("SELECT nombre FROM periodo WHERE idPeriodo = "+p.getIdPeriodo(), txfPeriodo, "nombre");
         cargarDato("SELECT nombre FROM academia WHERE idAcademia = "+p.getIdAcademia(), txfAcademia, "nombre");
         cargarDato("SELECT nombre FROM academico WHERE idAcademico = "+p.getIdCoordinador(), txfCoordinador, "nombre");
-        cargarTemas();
         cargarActividades();
+        cargarTemas();
     }
     
     
@@ -168,8 +171,7 @@ public class VisualizarPlanDeTrabajoController implements Initializable {
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if(conn != null){
             try{
-             String consulta = "SELECT planAcademiaTema.nombre, parcial, experienciaEducativa.nombre "
-                     + "FROM planAcademiaTema "
+             String consulta = "SELECT * FROM planAcademiaTema "
                      + "INNER JOIN experienciaEducativa "
                      + "ON planAcademiaTema.idExperienciaEducativa = experienciaEducativa.idExperienciaEducativa "
                      + "WHERE idPlanAcademia = "+p.getIdPlanTrabajoAcademia();

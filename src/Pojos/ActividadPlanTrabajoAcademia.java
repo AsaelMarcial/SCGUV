@@ -19,7 +19,6 @@ public class ActividadPlanTrabajoAcademia {
         this.idPlanAcademia = idPlanAcademia;
     }
 
-    
     public int getIdActividad() {
         return idActividad;
     }
@@ -59,6 +58,8 @@ public class ActividadPlanTrabajoAcademia {
     public void setIdPlanAcademia(int idPlanAcademia) {
         this.idPlanAcademia = idPlanAcademia;
     }
+
+    
 
     @Override
     public String toString() {
