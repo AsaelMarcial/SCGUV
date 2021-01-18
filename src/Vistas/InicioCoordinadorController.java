@@ -19,7 +19,6 @@ import javafx.stage.Stage;
  */
 public class InicioCoordinadorController implements Initializable {
 
-    @FXML
     private Button btnVerAvancesProgramaticos;
     @FXML
     private Button btnVerPlanesDeTrabajo;
@@ -27,6 +26,8 @@ public class InicioCoordinadorController implements Initializable {
     private Button btnVerMinutas;
     @FXML
     private Button btnVerProgramasDeEstudios;
+    @FXML
+    private Button btnVerAcademias;
 
     /**
      * Initializes the controller class.
@@ -36,22 +37,18 @@ public class InicioCoordinadorController implements Initializable {
         
     }    
 
-    @FXML
     private void clicVerAvancesProgramáticos(ActionEvent event) {
         abrirOpciónCliqueada("VerAvances.fxml");
     }
 
-    @FXML
     private void clicVerPlanesDeTrabajo(ActionEvent event) {
         abrirOpciónCliqueada("VerPlanesDeTrabajo.fxml");
     }
 
-    @FXML
     private void clicVerMinutasDeReunionAcademica(ActionEvent event) {
         abrirOpciónCliqueada("VerMinutas.fxml");
     }
 
-    @FXML
     private void clicVerProgramasDeEstudios(ActionEvent event) {
         abrirOpciónCliqueada("VerPlanesDeCurso.fxml");
     }
@@ -65,5 +62,21 @@ public class InicioCoordinadorController implements Initializable {
         }catch(IOException ex){
             System.out.println("Error al cargar FXML"+ex.getMessage());
         }
+    }
+
+    @FXML
+    private void clicVerAcademias(ActionEvent event) {
+    }
+
+    @FXML
+    private void clicVerAcademicos(ActionEvent event) {
+    }
+
+    @FXML
+    private void clicVerExperienciasEducativas(ActionEvent event) {
+    }
+
+    @FXML
+    private void clicVerPeriodos(ActionEvent event) {
     }
 }
