@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="410.0" prefWidth="395.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vistas.InicioAdministradorController">
+   <children>
+      <Button fx:id="btnVerAcademicos" layoutX="78.0" layoutY="127.0" mnemonicParsing="false" onAction="#clicVerAcademicos" prefHeight="46.0" prefWidth="240.0" style="-fx-background-color: #3369CD;" text="Ver académicos" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Label layoutX="91.0" layoutY="20.0" text="Sistema de Gestión de Calidad">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnVerExperienciasEducativas" layoutX="78.0" layoutY="198.0" mnemonicParsing="false" onAction="#clicVerExperienciasEducativas" prefHeight="46.0" prefWidth="240.0" style="-fx-background-color: #3369CD;" text="Ver experiencias educativas" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Label layoutX="164.0" layoutY="58.0" text="Administrador" />
+      <Button fx:id="btnVerPeriodos" layoutX="79.0" layoutY="268.0" mnemonicParsing="false" onAction="#clicVerPeriodos" prefHeight="46.0" prefWidth="240.0" style="-fx-background-color: #3369CD;" text="Ver periodos" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
