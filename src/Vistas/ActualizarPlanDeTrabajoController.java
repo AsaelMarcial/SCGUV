@@ -155,6 +155,10 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
         this.tbcTemasParcial.setCellValueFactory(new PropertyValueFactory("parcial"));
         this.tbcTemasExperienciaEducativa.setCellValueFactory(new PropertyValueFactory("nombreExperienciaEducativa"));
         
+        parciales.add("Primer parcial");
+        parciales.add("Segundo parcial");
+        cmbParcial.setItems(parciales);
+        
         
         cmbAcademia.valueProperty().addListener(new ChangeListener<Academia>(){
             @Override
@@ -592,8 +596,7 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if(conn != null){
             try{
-             String consulta = "UPDATE planAcademia (nombre, objetivo, idAcademia, idPeriodo, idCoordinador) VALUES (?, ?, ?, ?, ?)"
-                            + "WHERE idPlanAcademia = "+id;
+             String consulta = "UPDATE planAcademia SET nombre=?, objetivo=?, idAcademia=?, idPeriodo=?, idCoordinador=? WHERE idPlanAcademia = "+id;
              PreparedStatement ps = conn.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS);
              ps.setString(1, nombre);
              ps.setString(2, objetivo);
@@ -674,6 +677,7 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
             alertConexion.showAndWait();
         }
     }
+    
     private void registrarTemas(String nombre, int parcial, int idExperienciaEducativa){
         Connection conn = ConexionBD.iniciarConexionMySQL();
         if(conn != null){
@@ -689,7 +693,7 @@ public class ActualizarPlanDeTrabajoController implements Initializable {
              ps.close();
              conn.close();
             }catch(SQLException ex){
-                alertConexion = Herramientas.constructorDeAlertas("Error de consulta registrarTemas", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta", "La consulta a la base de datos no es correcta"+ex.getMessage(), Alert.AlertType.ERROR);
                 alertConexion.showAndWait();   
             }
         }else{
