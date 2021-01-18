@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Vistas;
 
 import BaseDeDatos.ConexionBD;
@@ -55,6 +50,7 @@ public class VerProgramaDeEstudiosController implements Initializable {
     @FXML
     private Button btnActualizar;
 
+    Alert alertConexion;
     /**
      * Initializes the controller class.
      */
@@ -124,7 +120,7 @@ public class VerProgramaDeEstudiosController implements Initializable {
         ProgramaEstudio programa = new ProgramaEstudio();
         programa = listvProgramaDeEstudios.getSelectionModel().getSelectedItem();
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("visualizarProgramaDeEstudios.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("VisualizarProgramaDeEstudios.fxml"));
             Parent root = loader.load();
             VisualizarProgramaDeEstudiosController controlador = loader.getController();
             controlador.pasarPrograma(programa);
@@ -149,16 +145,15 @@ public class VerProgramaDeEstudiosController implements Initializable {
     private void clicActualizarPrograma(ActionEvent event) {
         ProgramaEstudio programa = new ProgramaEstudio();
         programa = listvProgramaDeEstudios.getSelectionModel().getSelectedItem();
-        try{
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ActualizarProgramaDeEstudios.fxml"));
-             
+
             Parent root = loader.load();
-            
+
             ActualizarProgramaDeEstudiosController controlador = loader.getController();
             controlador.pasarPrograma(programa);
-           
 
-            Scene scene= new Scene(root);
+            Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
@@ -169,14 +164,20 @@ public class VerProgramaDeEstudiosController implements Initializable {
             btnVisualizarPrograma.setDisable(true);
             btnActualizarPrograma.setDisable(true);
             btnEliminarPrograma.setDisable(true);
-            
-        }catch(IOException ex){
-            System.out.println("Error al cargar FXML ->  "+ex.getMessage());
+
+        } catch (IOException ex) {
+            System.out.println("Error al cargar FXML ->  " + ex.getMessage());
         }
     }
 
     @FXML
     private void clicEliminarPrograma(ActionEvent event) {
+        ProgramaEstudio programa = new ProgramaEstudio();
+        programa = listvProgramaDeEstudios.getSelectionModel().getSelectedItem();
+        int idPrograma = programa.getIdProgramaEstudio();
+        eliminarBibliografia(idPrograma);
+        eliminarEvaluacion(idPrograma);
+        eliminarPrograma(idPrograma);
     }
 
     @FXML
@@ -207,6 +208,63 @@ public class VerProgramaDeEstudiosController implements Initializable {
     private void clicActualizar(ActionEvent event) {
         programas.clear();
         cargarListaDeProgramas();
+    }
+
+    private void eliminarBibliografia(int idPrograma) {
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        if (conn != null) {
+            try {
+                String consulta = "DELETE FROM programaEstudioBibliografia WHERE idProgramaEstudio = " + idPrograma;
+                PreparedStatement ps = conn.prepareStatement(consulta);
+                ps.executeUpdate();
+                ps.close();
+                conn.close();
+            } catch (SQLException ex) {
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta eliminar Bibliografia", "La consulta a la base de datos no es correcta" + ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion.showAndWait();
+            }
+        } else {
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+    }
+
+    private void eliminarEvaluacion(int idPrograma) {
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        if (conn != null) {
+            try {
+                String consulta = "DELETE FROM programaEstudioEvaluacion WHERE idProgramaEstudio = " + idPrograma;
+                PreparedStatement ps = conn.prepareStatement(consulta);
+                ps.executeUpdate();
+                ps.close();
+                conn.close();
+            } catch (SQLException ex) {
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta eliminar Evaluacion", "La consulta a la base de datos no es correcta" + ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion.showAndWait();
+            }
+        } else {
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
+    }
+
+    private void eliminarPrograma(int idPrograma) {
+        Connection conn = ConexionBD.iniciarConexionMySQL();
+        if (conn != null) {
+            try {
+                String consulta = "DELETE FROM programaEstudio WHERE idProgramaEstudio = " + idPrograma;
+                PreparedStatement ps = conn.prepareStatement(consulta);
+                ps.executeUpdate();
+                ps.close();
+                conn.close();
+            } catch (SQLException ex) {
+                alertConexion = Herramientas.constructorDeAlertas("Error de consulta eliminar Programa de estudios", "La consulta a la base de datos no es correcta" + ex.getMessage(), Alert.AlertType.ERROR);
+                alertConexion.showAndWait();
+            }
+        } else {
+            alertConexion = Herramientas.constructorDeAlertas("Error de conexion", "No se puede conectar a la base de datos", Alert.AlertType.ERROR);
+            alertConexion.showAndWait();
+        }
     }
 
 }

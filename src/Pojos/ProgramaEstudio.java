@@ -189,7 +189,7 @@ public class ProgramaEstudio {
 
     @Override
     public String toString() {
-        return modalidad;
+        return "Clave: " + codigo;
     }
     
     
